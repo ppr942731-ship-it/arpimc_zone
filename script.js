@@ -367,7 +367,11 @@ function renderGameContent() {
     filtered.forEach(game => {
       html += `
         <div class="skin-card" onclick="openGameFull('${game.link}', '${game.nama.replace(/'/g, "\\'")}')">
-          <img src="${game.gambar}" alt="${game.nama}" loading="lazy">
+          <img src="$${game.gambar 
+  ? `<img src="${game.gambar}" alt="${game.nama}" loading="lazy">` 
+  : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:var(--bg-primary);color:var(--text-secondary);font-size:40px;">🎮</div>`
+}
+">
           <div class="card-body">
             <h3 class="card-title">${game.nama}</h3>
             <p class="card-desc">${game.deskripsi || ''}</p>

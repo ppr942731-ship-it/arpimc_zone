@@ -658,27 +658,6 @@ img {
   font-size: 13px;
 }
 
-/* Preview Gambar Saja */
-.preview-modal-content {
-  background-color: transparent;
-  max-width: 90vw;
-}
-
-.preview-modal-content img {
-  max-width: 100%;
-  max-height: 70vh;
-  border-radius: var(--radius-md);
-}
-
-.preview-close-btn {
-  position: absolute;
-  top: -45px;
-  right: 0;
-  color: white;
-  font-size: 30px;
-  padding: 6px 14px;
-}
-
 /* ---------- HALAMAN GAME PENUH IFRAME ---------- */
 .game-fullscreen {
   position: fixed;
@@ -826,4 +805,12 @@ img {
   border-radius: var(--radius-md);
   font-size: 14px;
   z-index: 500;
-  animation: toastIn 0
+  animation: toastIn 0.3s ease;
+}
+
+@keyframes toastIn {
+  from { bottom: 80px; opacity: 0; }
+  to { bottom: 100px; opacity: 1; }
+}
+
+/* ---------- RESPONS

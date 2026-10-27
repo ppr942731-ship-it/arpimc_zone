@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#10121b">
+<meta name="description" content="ArpiMC Zone Caca Edition — koleksi Minecraft skin, addon, dan mini game.">
+<title>ArpiMC Zone | Caca Edition</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+<header class="topbar">
+  <a class="brand" href="#" aria-label="ArpiMC Zone beranda"><span class="brand-cube">A</span><span>ArpiMC <b>ZONE</b><small>CACA EDITION · COMMUNITY HUB</small></span></a>
+  <button class="icon-btn" id="themeToggle" aria-label="Ganti tema" title="Ganti tema">◐</button>
+</header>
+<main>
+  <section class="hero">
+    <div class="hero-copy"><span class="eyebrow"><i></i> MINECRAFT COMMUNITY HUB</span>
+      <h1>Level up your<br><span> Minecraft world.</span></h1>
+      <p>Skin keren, addon pilihan, dan mini game. Satu tempat, tinggal pilih dan jelajahi.</p>
+      <div class="hero-actions"><button class="primary-btn" data-jump="skins">Jelajahi koleksi <span>↗</span></button><span class="hero-note">✦ Gratis untuk dijelajahi</span></div>
+    </div>
+    <div class="hero-art" aria-hidden="true"><div class="orbit orbit-a"></div><div class="orbit orbit-b"></div><div class="pixel-cube"><span>✦</span></div><div class="float-tag tag-top">CRAFT YOUR STYLE</div><div class="float-tag tag-bottom">ARPI<span>MC</span> / 01</div></div>
+  </section>
+  <section class="quick-stats">
+    <div><span class="stat-icon">▦</span><strong id="totalSkin">—</strong><small>Skin & pack</small></div>
+    <div><span class="stat-icon">⬡</span><strong id="totalAddon">—</strong><small>Addon tersedia</small></div>
+    <div><span class="stat-icon">◉</span><strong id="totalGames">—</strong><small>Mini game</small></div>
+    <div><span class="stat-icon">♡</span><strong id="favoriteCount">0</strong><small>Favorit kamu</small></div>
+  </section>
+  <nav class="section-tabs" aria-label="Navigasi koleksi">
+    <button class="tab active" data-page="skins">✧ <span>Skin</span></button>
+    <button class="tab" data-page="addons">⬡ <span>Addon</span></button>
+    <button class="tab" data-page="games">▣ <span>Mini Game</span></button>
+    <button class="tab" data-page="favorites">♡ <span>Favorit</span></button>
+  </nav>
+  <section id="skinsPage" class="page active">
+    <div class="section-heading"><div><span class="eyebrow">FIND YOUR LOOK</span><h2>Koleksi <span>Skin</span></h2><p>Pilih karakter yang cocok dengan gaya mainmu.</p></div><label class="search"><span>⌕</span><input id="skinSearch" placeholder="Cari skin..." autocomplete="off"></label></div>
+    <div class="filter-row" id="skinFilters">
+      <button class="chip active" data-cat="all">Semua</button><button class="chip" data-cat="cowok">Cowok</button><button class="chip" data-cat="cewek">Cewek</button><button class="chip" data-cat="pvp">PVP</button><button class="chip" data-cat="template">Template</button><button class="chip" data-cat="pack">Skin Pack</button>
+    </div>
+    <div class="results-line"><span id="skinResultCount">Memuat koleksi…</span><span>Preview · Favorit · Unduh</span></div>
+    <div id="skinGrid" class="card-grid"></div>
+  </section>
+  <section id="addonsPage" class="page">
+    <div class="section-heading"><div><span class="eyebrow">CHANGE YOUR GAME</span><h2>Addon <span>Library</span></h2><p>Tambahkan sesuatu yang baru ke dunia Minecraft-mu.</p></div><label class="search"><span>⌕</span><input id="addonSearch" placeholder="Cari addon..." autocomplete="off"></label></div>
+    <div class="filter-row" id="addonFilters"><button class="chip active" data-cat="all">Semua</button><button class="chip" data-cat="addon">Addon</button><button class="chip" data-cat="pack">Pack</button><button class="chip" data-cat="shader">Shader</button><button class="chip" data-cat="ui">UI</button><button class="chip" data-cat="lain">Lain-lain</button></div>
+    <div class="results-line"><span id="addonResultCount">Memuat koleksi…</span><span>Download langsung</span></div><div id="addonGrid" class="card-grid addon-grid"></div>
+  </section>
+  <section id="gamesPage" class="page">
+    <div class="section-heading"><div><span class="eyebrow">TAKE A BREAK</span><h2>Mini <span>Games</span></h2><p>Istirahat sebentar dari crafting. Tantang refleks dan pengetahuanmu.</p></div></div>
+    <div id="gameGrid" class="game-grid"></div>
+  </section>
+  <section id="favoritesPage" class="page">
+    <div class="section-heading"><div><span class="eyebrow">SAVED BY YOU</span><h2>Favorit <span>Pribadi</span></h2><p>Item yang kamu simpan di perangkat ini.</p></div></div>
+    <div id="favoriteGrid" class="card-grid"></div><p id="emptyFavorites" class="empty-state">Belum ada favorit. Tekan ♡ pada kartu item untuk menyimpannya.</p>
+  </section>
+  <footer><div class="footer-brand"><span class="brand-cube">A</span><strong>ArpiMC Zone</strong></div><p>Made for Minecraft fans, built with ✦ by Caca Edition.</p><span class="footer-small">Fan-made community website · Not affiliated with Mojang or Microsoft.</span></footer>
+</main>
+<div id="previewModal" class="modal" aria-hidden="true"><div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="modalTitle"><button id="modalClose" class="modal-x" aria-label="Tutup">×</button><span class="eyebrow">ITEM PREVIEW</span><h3 id="modalTitle"></h3><div id="modalImageWrap" class="modal-image-wrap"><img id="modalImage" alt="Pratinjau item"></div><div class="modal-actions"><a id="modalDownload" class="primary-btn" href="#" target="_blank" rel="noopener">Unduh item ↗</a><button id="modalShare" class="secondary-btn">Bagikan ↗</button></div></div></div>
+<div id="toast" class="toast" role="status"></div>
+<script src="script.js"></script>
+</body></html>

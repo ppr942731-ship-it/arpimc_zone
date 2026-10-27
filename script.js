@@ -1,337 +1,204 @@
-const state = {
-  skins: [],
-  addons: [],
-  games: [],
-  category: "all",
-  query: "",
-  page: "skins",
-  selected: null,
-  favorites: new Set(JSON.parse(localStorage.getItem("arpimc-favorites") || "[]"))
-};
+// === DATA ===
+let allSkins = [];
+let allAddons = [];
+let allGames = [];
 
-const $ = id => document.getElementById(id);
+// === ELEMEN ===
+const pageSkins = document.getElementById('skinsPage');
+const pageAddons = document.getElementById('addonsPage');
+const pageGames = document.getElementById('gamesPage');
 
-function escapeHTML(value = "") {
-  return String(value).replace(/[&<>"']/g, char => ({
-    "&": "&amp;", "<": "&lt;", ">": "&gt;",
-    '"': "&quot;", "'": "&#39;"
-  })[char]);
-}
+const navBtns = document.querySelectorAll('.bottom-nav button');
+const filterSkinBtns = document.querySelectorAll('#skinFilters button');
+const filterAddonBtns = document.querySelectorAll('#addonFilters button');
 
-function saveFavorites() {
-  localStorage.setItem("arpimc-favorites", JSON.stringify([...state.favorites]));
-}
+const skinGrid = document.getElementById('skinGrid');
+const addonGrid = document.getElementById('addonGrid');
+const gameGrid = document.getElementById('gameGrid');
 
-function allItems() {
-  return [
-    ...state.skins.map(item => ({ ...item, _type: "skin", _key: "s" + item.id })),
-    ...state.addons.map(item => ({ ...item, _type: "addon", _key: "a" + item.id }))
-  ];
-}
+const totalSkinEl = document.getElementById('totalSkin');
+const totalAddonEl = document.getElementById('totalAddon');
 
-function titleOf(item) {
-  return item.tag || item.nama || "Item Minecraft";
-}
+const themeBtn = document.getElementById('themeBtn');
+const themeMenu = document.getElementById('themeMenu');
+const themeOptions = document.querySelectorAll('.theme-menu button');
 
-function imageOf(item) {
-  return item.gambar || "";
-}
+const previewModal = document.getElementById('previewModal');
+const modalTitle = document.getElementById('modalTitle');
+const modalImage = document.getElementById('modalImage');
+const modalClose = document.getElementById('modalClose');
 
-function renderCard(item) {
-  const key = item._key || (item._type === "addon" ? "a" : "s") + item.id;
-  const title = titleOf(item);
-  const category = item.kategori || "";
-  const image = imageOf(item);
-  const saved = state.favorites.has(key);
+// === NAVIGASI ===
+navBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const targetPage = btn.dataset.page;
+    // Ganti halaman
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById(`${targetPage}Page`).classList.add('active');
+    // Ganti status tombol aktif
+    navBtns.forEach(b => b.classList.remove('nav-active'));
+    btn.classList.add('nav-active');
+  });
+});
 
-  return `
-    <article class="card" data-category="${escapeHTML(category)}">
-      <div class="card-image">
-        ${image
-          ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(title)}" loading="lazy">`
-          : `<span>🧱</span>`}
-        <span class="badge">${escapeHTML(category.toUpperCase() || "ITEM")}</span>
-        <button class="favorite ${saved ? "saved" : ""}"
-          data-favorite="${escapeHTML(key)}"
-          aria-label="Simpan favorit">${saved ? "♥" : "♡"}</button>
-      </div>
-      <div class="card-content">
-        <h3>${escapeHTML(title)}</h3>
-        <p>${escapeHTML(item.deskripsi || item.author || item.creator || "Minecraft collection")}</p>
-        <div class="card-actions">
-          <button data-preview="${escapeHTML(key)}">Preview</button>
-          <a class="download" href="${escapeHTML(item.link_download || "#")}"
-             target="_blank" rel="noopener noreferrer">Unduh ↗</a>
-        </div>
-      </div>
-    </article>`;
-}
+// === FILTER SKIN ===
+let currentSkinFilter = 'all';
 
+filterSkinBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterSkinBtns.forEach(b => b.classList.remove('filter-active'));
+    btn.classList.add('filter-active');
+    currentSkinFilter = btn.dataset.cat;
+    renderSkins();
+  });
+});
+
+// === FILTER ADDON ===
+let currentAddonFilter = 'all';
+
+filterAddonBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    filterAddonBtns.forEach(b => b.classList.remove('filter-active'));
+    btn.classList.add('filter-active');
+    currentAddonFilter = btn.dataset.cat;
+    renderAddons();
+  });
+});
+
+// === FUNGSI RENDER SKIN ===
 function renderSkins() {
-  const q = state.query.toLowerCase();
-
-  const items = state.skins.filter(item => {
-    const categoryMatch = state.category === "all" ||
-      item.kategori === state.category;
-
-    const text = `${item.tag || ""} ${item.kategori || ""}`.toLowerCase();
-    return categoryMatch && text.includes(q);
-  });
-
-  $("skinGrid").innerHTML = items.map(renderCard).join("") ||
-    '<p class="empty" style="display:block">Skin tidak ditemukan.</p>';
+  let filtered = allSkins;
+  if (currentSkinFilter !== 'all') {
+    filtered = allSkins.filter(s => s.kategori === currentSkinFilter);
+  }
+  
+  skinGrid.innerHTML = filtered.map(skin => `
+    <div class="skin-card">
+      <img src="${skin.gambar}" alt="${skin.tag}" loading="lazy">
+      <h3>${skin.tag}</h3>
+      <div class="skin-buttons">
+        <button class="btn btn-secondary" onclick="openPreview('${skin.gambar}', '${skin.tag}')">Preview</button>
+        <a href="${skin.link_download}" target="_blank" class="btn btn-primary">Unduh</a>
+      </div>
+    </div>
+  `).join('');
+  
+  totalSkinEl.textContent = allSkins.length;
 }
 
+// === FUNGSI RENDER ADDON ===
 function renderAddons() {
-  const q = $("addonSearch").value.toLowerCase();
-
-  const items = state.addons.filter(item =>
-    `${item.nama || ""} ${item.kategori || ""} ${item.deskripsi || ""}`
-      .toLowerCase().includes(q)
-  );
-
-  $("addonGrid").innerHTML = items.map(item => {
-    item._type = "addon";
-    return renderCard(item);
-  }).join("") || '<p class="empty" style="display:block">Addon tidak ditemukan.</p>';
+  let filtered = allAddons;
+  if (currentAddonFilter !== 'all') {
+    filtered = allAddons.filter(a => a.kategori === currentAddonFilter);
+  }
+  
+  addonGrid.innerHTML = filtered.map(addon => `
+    <div class="addon-card">
+      <div class="addon-img-wrapper">
+        <img src="${addon.gambar}" alt="${addon.nama}" loading="lazy">
+      </div>
+      <h3>${addon.nama}</h3>
+      <p class="addon-desc">${addon.deskripsi || ''}</p>
+      <div class="addon-buttons">
+        <button class="btn btn-secondary" onclick="openPreview('${addon.gambar}', '${addon.nama}')">Preview</button>
+        <a href="${addon.link_download}" target="_blank" class="btn btn-primary">Unduh</a>
+      </div>
+    </div>
+  `).join('');
+  
+  totalAddonEl.textContent = allAddons.length;
 }
 
+// === FUNGSI RENDER GAME ===
 function renderGames() {
-  $("gameGrid").innerHTML = state.games.map(game => `
-    <article class="game-card">
-      <h3>${escapeHTML(game.nama || "Mini Game")}</h3>
-      <p>${escapeHTML(game.deskripsi || "")}</p>
-      <iframe src="${escapeHTML(game.link || "")}"
-        title="${escapeHTML(game.nama || "Mini Game")}"
-        loading="lazy"
-        sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
-      <p><a class="primary" target="_blank" rel="noopener"
-        href="${escapeHTML(game.link || "#")}">Buka penuh ↗</a></p>
-    </article>
-  `).join("");
+  gameGrid.innerHTML = allGames.map(game => `
+    <div class="game-card">
+      <h3>${game.nama}</h3>
+      <p class="game-desc">${game.deskripsi}</p>
+      <div class="game-iframe">
+        <iframe src="${game.link}" title="${game.nama}" allowfullscreen loading="lazy"></iframe>
+      </div>
+      <div class="game-links">
+        <a href="${game.link}" target="_blank" class="btn btn-primary">Buka Penuh</a>
+      </div>
+    </div>
+  `).join('');
 }
 
-function renderFavorites() {
-  const items = allItems().filter(item => state.favorites.has(item._key));
-
-  $("favoriteGrid").innerHTML = items.map(renderCard).join("");
-  $("emptyFavorites").style.display = items.length ? "none" : "block";
+// === MODAL PREVIEW ===
+function openPreview(src, title) {
+  modalImage.src = src;
+  modalTitle.textContent = title;
+  previewModal.classList.add('active');
+  document.body.style.overflow = 'hidden';
 }
 
-function updateStats() {
-  $("skinTotal").textContent = state.skins.length;
-  $("addonTotal").textContent = state.addons.length;
-  $("gameTotal").textContent = state.games.length;
-  $("favTotal").textContent = state.favorites.size;
-}
+modalClose.addEventListener('click', () => {
+  previewModal.classList.remove('active');
+  document.body.style.overflow = '';
+});
 
-function openPreview(key) {
-  const item = allItems().find(entry => entry._key === key);
-  if (!item) return;
+previewModal.addEventListener('click', (e) => {
+  if (e.target === previewModal) {
+    previewModal.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+});
 
-  state.selected = item;
+// === PILIH TEMA ===
+themeBtn.addEventListener('click', () => {
+  themeMenu.classList.toggle('active');
+});
 
-  $("previewTitle").textContent = titleOf(item);
-  $("previewImage").src = imageOf(item);
-  $("previewAuthor").textContent =
-    item.author || item.creator || "Minecraft collection";
-  $("downloadButton").href = item.link_download || "#";
-
-  const ratings = JSON.parse(localStorage.getItem("arpimc-ratings") || "{}");
-  const rating = ratings[key] || 0;
-
-  document.querySelectorAll("#ratingButtons button").forEach(button => {
-    button.classList.toggle("selected", Number(button.dataset.rating) <= rating);
+themeOptions.forEach(option => {
+  option.addEventListener('click', () => {
+    const theme = option.dataset.theme;
+    if (theme === 'default') {
+      document.documentElement.removeAttribute('data-theme');
+      localStorage.removeItem('site-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('site-theme', theme);
+    }
+    themeMenu.classList.remove('active');
   });
+});
 
-  $("ratingLabel").textContent = rating ? `${rating}/5` : "Belum diberi rating";
+// Tutup menu tema kalau klik di luar
+document.addEventListener('click', (e) => {
+  if (!themeBtn.contains(e.target) && !themeMenu.contains(e.target)) {
+    themeMenu.classList.remove('active');
+  }
+});
 
-  renderComments(key);
-  $("previewModal").classList.add("open");
+// Muat tema tersimpan
+const savedTheme = localStorage.getItem('site-theme');
+if (savedTheme) {
+  document.documentElement.setAttribute('data-theme', savedTheme);
 }
 
-function renderComments(key) {
-  const comments = JSON.parse(localStorage.getItem("arpimc-comments") || "{}");
-  $("commentList").innerHTML = (comments[key] || []).map(comment =>
-    `<div class="comment-entry">${escapeHTML(comment)}</div>`
-  ).join("") || '<p class="muted">Belum ada catatan.</p>';
-}
-
-function closePreview() {
-  $("previewModal").classList.remove("open");
-  $("previewImage").src = "";
-  state.selected = null;
-}
-
-function scrollToCollection() {
-  document.querySelector(".tabs").scrollIntoView({ behavior: "smooth" });
-}
-
-document.addEventListener("click", event => {
-  const favoriteButton = event.target.closest("[data-favorite]");
-
-  if (favoriteButton) {
-    const key = favoriteButton.dataset.favorite;
-
-    if (state.favorites.has(key)) state.favorites.delete(key);
-    else state.favorites.add(key);
-
-    saveFavorites();
-    updateStats();
+// === MUAT DATA DARI JSON ===
+async function loadData() {
+  try {
+    const [skinsRes, addonsRes, gamesRes] = await Promise.all([
+      fetch('skins.json'),
+      fetch('addons.json'),
+      fetch('games.json')
+    ]);
+    
+    allSkins = await skinsRes.json();
+    allAddons = await addonsRes.json();
+    allGames = await gamesRes.json();
+    
     renderSkins();
     renderAddons();
-    renderFavorites();
-    return;
+    renderGames();
+    
+  } catch (err) {
+    console.error('Gagal memuat data:', err);
   }
-
-  const previewButton = event.target.closest("[data-preview]");
-  if (previewButton) {
-    openPreview(previewButton.dataset.preview);
-    return;
-  }
-
-  const tab = event.target.closest("[data-page]");
-  if (tab) {
-    state.page = tab.dataset.page;
-
-    document.querySelectorAll(".tabs button").forEach(button =>
-      button.classList.toggle("active", button === tab)
-    );
-
-    document.querySelectorAll(".page").forEach(page =>
-      page.classList.toggle("active", page.id === state.page)
-    );
-
-    if (state.page === "favorites") renderFavorites();
-    return;
-  }
-
-  const categoryButton = event.target.closest("[data-category]");
-  if (categoryButton && categoryButton.closest(".filters")) {
-    state.category = categoryButton.dataset.category;
-
-    document.querySelectorAll(".filters button").forEach(button =>
-      button.classList.toggle("active", button === categoryButton)
-    );
-
-    renderSkins();
-    return;
-  }
-});
-
-$("skinSearch").addEventListener("input", event => {
-  state.query = event.target.value;
-  renderSkins();
-});
-
-$("addonSearch").addEventListener("input", renderAddons);
-
-$("closeModal").addEventListener("click", closePreview);
-
-$("previewModal").addEventListener("click", event => {
-  if (event.target.id === "previewModal") closePreview();
-});
-
-document.addEventListener("keydown", event => {
-  if (event.key === "Escape") closePreview();
-});
-
-$("themeToggle").addEventListener("click", () => {
-  document.documentElement.classList.toggle("light");
-
-  localStorage.setItem(
-    "arpimc-theme",
-    document.documentElement.classList.contains("light") ? "light" : "dark"
-  );
-});
-
-$("ratingButtons").addEventListener("click", event => {
-  const button = event.target.closest("[data-rating]");
-  if (!button || !state.selected) return;
-
-  const ratings = JSON.parse(localStorage.getItem("arpimc-ratings") || "{}");
-  ratings[state.selected._key] = Number(button.dataset.rating);
-  localStorage.setItem("arpimc-ratings", JSON.stringify(ratings));
-
-  document.querySelectorAll("#ratingButtons button").forEach(star => {
-    star.classList.toggle(
-      "selected",
-      Number(star.dataset.rating) <= Number(button.dataset.rating)
-    );
-  });
-
-  $("ratingLabel").textContent = `${button.dataset.rating}/5`;
-});
-
-$("commentForm").addEventListener("submit", event => {
-  event.preventDefault();
-  if (!state.selected) return;
-
-  const text = $("commentInput").value.trim();
-  if (!text) return;
-
-  const comments = JSON.parse(localStorage.getItem("arpimc-comments") || "{}");
-  const key = state.selected._key;
-
-  comments[key] ||= [];
-  comments[key].push(text);
-
-  localStorage.setItem("arpimc-comments", JSON.stringify(comments));
-  $("commentInput").value = "";
-  renderComments(key);
-});
-
-$("shareButton").addEventListener("click", async () => {
-  if (!state.selected) return;
-
-  const item = state.selected;
-  const message = `${titleOf(item)}\n${location.origin}${location.pathname}`;
-
-  try {
-    if (navigator.share) {
-      await navigator.share({
-        title: titleOf(item),
-        text: "Lihat koleksi Minecraft ini di ArpiMC Zone!",
-        url: location.href
-      });
-    } else {
-      const wa = "https://wa.me/?text=" + encodeURIComponent(message);
-      window.open(wa, "_blank", "noopener,noreferrer");
-    }
-  } catch (error) {
-    if (error.name !== "AbortError") console.error(error);
-  }
-});
-
-if (localStorage.getItem("arpimc-theme") === "light") {
-  document.documentElement.classList.add("light");
 }
 
-Promise.all([
-  fetch("skins.json").then(response => {
-    if (!response.ok) throw new Error("skins.json gagal dimuat");
-    return response.json();
-  }),
-  fetch("addons.json").then(response => {
-    if (!response.ok) throw new Error("addons.json gagal dimuat");
-    return response.json();
-  }),
-  fetch("games.json").then(response => {
-    if (!response.ok) throw new Error("games.json gagal dimuat");
-    return response.json();
-  })
-]).then(([skins, addons, games]) => {
-  state.skins = skins;
-  state.addons = addons;
-  state.games = games;
-
-  updateStats();
-  renderSkins();
-  renderAddons();
-  renderGames();
-  renderFavorites();
-}).catch(error => {
-  console.error(error);
-  $("skinGrid").innerHTML =
-    '<p class="empty" style="display:block">Gagal memuat data JSON. Periksa nama dan lokasi file.</p>';
-});
+// Jalankan saat halaman siap
+document.addEventListener('DOMContentLoaded', loadData);

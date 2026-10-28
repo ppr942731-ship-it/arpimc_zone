@@ -365,13 +365,14 @@ function renderGameContent() {
     html += '<p style="grid-column:1/-1;text-align:center;color:var(--text-secondary);padding:40px 0;">Belum ada konten</p>';
   } else {
     filtered.forEach(game => {
+      // Cek apakah ada gambar yang valid
+      const mediaHtml = game.gambar && game.gambar.trim() !== ""
+        ? `<img src="${game.gambar}" alt="${game.nama}" loading="lazy" style="width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:8px;">`
+        : `<div style="height:130px;width:100%;display:flex;align-items:center;justify-content:center;background:var(--bg-primary);color:var(--text-secondary);font-size:42px;border-radius:8px;">🎮</div>`;
+
       html += `
         <div class="skin-card" onclick="openGameFull('${game.link}', '${game.nama.replace(/'/g, "\\'")}')">
-          <img src="$${game.gambar 
-  ? `<img src="${game.gambar}" alt="${game.nama}" loading="lazy">` 
-  : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:var(--bg-primary);color:var(--text-secondary);font-size:40px;">🎮</div>`
-}
-">
+          ${mediaHtml}
           <div class="card-body">
             <h3 class="card-title">${game.nama}</h3>
             <p class="card-desc">${game.deskripsi || ''}</p>
@@ -384,6 +385,7 @@ function renderGameContent() {
   
   content.innerHTML = html;
 }
+
 
 // ---------- BUKA GAME DI IFRAME PENUH ----------
 function openGameFull(link, nama) {

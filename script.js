@@ -400,7 +400,6 @@ function openGameFull(link, nama) {
     iframe.src = '';
   };
 }
-
 // ---------- MODAL DETAIL UMUM ----------
 let currentGalleryImages = [];
 let currentGalleryIndex = 0;

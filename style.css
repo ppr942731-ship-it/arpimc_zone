@@ -129,37 +129,55 @@ body {
 /* =============================================
    === BAGIAN: NAVIGASI ===
 ============================================= */
-.main-nav {
+/* =============================================
+   === BAGIAN: NAVIGASI BAWAH ===
+============================================= */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
   display: flex;
-  justify-content: center;
-  gap: 4px;
-  padding: 8px 16px 12px;
-  position: sticky;
-  top: 64px;
+  justify-content: space-around;
+  padding: 8px 16px;
+  padding-bottom: max(8px, env(safe-area-inset-bottom));
   background-color: var(--bg-primary);
-  z-index: 99;
+  border-top: 1px solid var(--border);
+  z-index: 100;
 }
 
-.nav-tab {
-  padding: 8px 16px;
+.bottom-nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 6px 16px;
   border: none;
   background: transparent;
   color: var(--text-secondary);
-  font-size: 14px;
-  font-weight: 500;
-  border-radius: 8px;
+  font-size: 11px;
   cursor: pointer;
+  border-radius: 8px;
   transition: all 0.2s ease;
 }
 
-.nav-tab.active {
-  background-color: var(--accent);
-  color: white;
+.bottom-nav-item.active {
+  color: var(--accent);
+  background-color: rgba(37, 99, 235, 0.08);
 }
 
-.nav-tab:hover:not(.active) {
-  background-color: var(--bg-secondary);
-  color: var(--text-primary);
+.nav-icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.nav-label {
+  font-size: 11px;
+}
+
+/* Tambah jarak bawah agar konten tidak ketutup navigasi */
+main {
+  padding-bottom: 80px !important;
 }
 
 /* =============================================

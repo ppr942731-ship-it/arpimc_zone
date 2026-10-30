@@ -1,12 +1,22 @@
-"icons": [
-  {
-    "src": "https://files.catbox.moe/8cccvq.png",
-    "sizes": "192x192",
-    "type": "image/png"
-  },
-  {
-    "src": "https://files.catbox.moe/gvd19y.png",
-    "sizes": "512x512",
-    "type": "image/png"
-  }
-]
+{
+  "name": "ArpiMC Zone",
+  "short_name": "ArpiMC",
+  "description": "Kumpulan Skin & Addon Minecraft Gratis — langsung unduh tanpa ribet",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#ffffff",
+  "theme_color": "#2563eb",
+  "icons": [
+    {
+      "src": "https://files.catbox.moe/7vkqqk.jpg",
+      "sizes": "any",
+      "type": "image/jpeg",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["utilities", "games", "entertainment"],
+  "lang": "id",
+  "author": "ArpiMC Zone"
+}

@@ -139,7 +139,7 @@ function bukaModalSkinFull(skin) {
   updateMetaShare(skin);
   
   body.innerHTML = `
-    <img src="${skin.gambar}" alt="${skin.tag}" style="width:100%;height:100%;object-fit:contain;">
+    <img src="${skin.gambar}" alt="${skin.tag}" loading="lazy">
   `;
   
   document.getElementById('skinFullName').textContent = skin.tag;
@@ -148,17 +148,28 @@ function bukaModalSkinFull(skin) {
     📅 ${skin.tanggal_upload || 'Tanggal tidak diketahui'}
   `;
   document.getElementById('skinFullDownload').href = skin.link_download;
-  document.getElementById('skinFullShare').onclick = () => bagikanLink(skin.id, skin.tag);
+  
+  // Tombol Salin
+  document.getElementById('skinFullCopy').onclick = async () => {
+    const teks = `${skin.tag}\n👉 ${shareUrl}`;
+    try {
+      await navigator.clipboard.writeText(teks);
+      alert('✅ Link disalin!');
+    } catch {
+      alert('❌ Gagal menyalin');
+    }
+  };
+  
+  // Tombol Bagikan WA
+  document.getElementById('skinFullWA').onclick = () => {
+    const teks = encodeURIComponent(`✨ ${skin.tag}\n👉 ${shareUrl}`);
+    window.open(`https://wa.me/?text=${teks}`, '_blank');
+  };
   
   modal.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
 }
 
-function tutupModalSkinFull() {
-  document.getElementById('skinFullModal').classList.add('hidden');
-  document.body.style.overflow = '';
-  history.pushState(null, '', window.location.pathname);
-}
 
 // =============================================
 // === BAGIKAN LINK KE WHATSAPP / SALIN ===

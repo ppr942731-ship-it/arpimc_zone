@@ -147,12 +147,15 @@
 <!-- ======================================
      === MODAL PREVIEW SKIN — LAYAR PENUH ===
 ====================================== -->
-<div id="skinFullModal" class="game-full-modal hidden">
-    <div class="game-modal-header">
-        <button class="game-back-btn" onclick="tutupModalSkinFull()">← Kembali</button>
-        <span style="flex:1;font-size:14px;font-weight:500;" id="skinFullName"></span>
-        <a id="skinFullDownload" href="" target="_blank" class="game-tab-btn">⬇️ Unduh</a>
+    <div style="padding:16px;background:var(--bg-primary);border-top:1px solid var(--border);">
+        <p id="skinFullDesc" style="font-size:14px;color:var(--text-secondary);margin-bottom:16px;line-height:1.5;"></p>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+            <a id="skinFullDownload" href="" target="_blank" class="modal-btn-act">⬇️ Unduh</a>
+            <button id="skinFullCopy" class="modal-btn-act">📋 Salin</button>
+            <button id="skinFullWA" class="modal-btn-act">💬 WA</button>
+        </div>
     </div>
+
     <div class="game-iframe-full" id="skinFullBody">
         <!-- Gambar skin muncul di sini -->
     </div>
@@ -189,7 +192,7 @@
             <button class="theme-option" data-theme="default">☀️ Default</button>
             <button class="theme-option" data-theme="dark">🌙 Gelap</button>
             <button class="theme-option" data-theme="neo-brutaslim">🔷 Neo-Brutaslim</button>
-            <button class="theme-option" data-theme="nori">💜 Pilihan Nori</button>
+            <button class="theme-option" data-theme="nori">💜 Tema unggu</button>
         </div>
     </div>
 </div>

@@ -3,7 +3,7 @@
     "judul": "Ikuti Saluran Kami",
     "deskripsi": "Dapatkan update terbaru dan konten eksklusif, langsung dari sumbernya",
     "daftar": [
-      { "nama": "Saluran WhatsApp", "link": "tautan-kamu" },
+      { "nama": "Saluran Keminfo Skin", "link": "https://whatsapp.com/channel/0029VbCxBy9ADTOIAxNYA80w" },
       { "nama": "Saluran Telegram", "link": "tautan-kamu" }
     ]
   },
@@ -32,6 +32,6 @@
   "dukungan": {
     "judul": "Dukung Kami",
     "deskripsi": "Karya gratis terus ada dengan dukungan kamu",
-    "tautan": "tautan-sociabuzz-kamu"
+    "tautan": ""
   }
 }

@@ -444,3 +444,35 @@ function setupThemePanel() {
   
   themeBtn.addEventListener('click', () => panel.classList.remove('hidden'));
   panel.addEventListener('click', (e) => { if (e.target === panel) panel.classList.add('hidden');
+  });
+  
+  choices.forEach(choice => {
+    choice.addEventListener('click', () => {
+      const theme = choice.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('arpimc-theme', theme);
+      panel.classList.add('hidden');
+    });
+  });
+}
+
+function tutupThemePanel() {
+  document.getElementById('themePanel').classList.add('hidden');
+}
+
+// === TUTUP MODAL DENGAN TOMBOL ESC ===
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    tutupSkinModal();
+    tutupAddonModal();
+    tutupGameModal();
+    tutupThemePanel();
+  }
+});
+
+// === KEMBALI KE HALAMAN UTAMA SAAT KLIK LOGO/NAMA ===
+window.addEventListener('popstate', () => {
+  tutupSkinModal();
+  tutupAddonModal();
+  tutupGameModal();
+});

@@ -1,124 +1,92 @@
-/* =============================================
-   === ARPIMC ZONE — SCRIPT.JS ===
-   === ID-based Link + Fullscreen Modal + Share Preview ===
-   ============================================= */
-
-let allSkins = [];
-let allAddons = [];
-let allGames = [];
-let currentFilter = 'all';
-let currentAddonFilter = 'all';
-
 // =============================================
-// === MUAT DATA DARI JSON ===
+// ARPIMC ZONE — script.js
 // =============================================
-async function loadAllData() {
+
+let skinsData = [];
+let addonsData = [];
+let gamesData = [];
+
+// === INISIALISASI ===
+document.addEventListener('DOMContentLoaded', () => {
+  loadSkins();
+  loadAddons();
+  loadGames();
+  setupNavigation();
+  setupThemePanel();
+  handleDirectSkinLink();
+});
+
+// === NAVIGASI BAWAH ===
+function setupNavigation() {
+  const navItems = document.querySelectorAll('.nav-item');
+  const sections = document.querySelectorAll('.page-section');
+
+  navItems.forEach(item => {
+    item.addEventListener('click', () => {
+      const targetPage = item.getAttribute('data-page');
+      
+      // Update nav state
+      navItems.forEach(nav => nav.classList.remove('active'));
+      item.classList.add('active');
+      
+      // Tampilkan halaman yang dipilih
+      sections.forEach(sec => sec.classList.remove('active'));
+      document.getElementById(`page-${targetPage}`).classList.add('active');
+    });
+  });
+}
+
+// === MUAT DATA SKIN ===
+async function loadSkins() {
   try {
-    const [skinsRes, addonsRes, gamesRes] = await Promise.all([
-      fetch('skins.json'),
-      fetch('addons.json'),
-      fetch('games.json')
-    ]);
-
-    allSkins = await skinsRes.json();
-    allAddons = await addonsRes.json();
-    allGames = await gamesRes.json();
-
-    document.getElementById('totalSkin').textContent = allSkins.length;
-    
-    renderSkins();
-    renderAddons();
-    renderGames();
-    
-    checkIdFromURL();
+    const res = await fetch('skins.json');
+    skinsData = await res.json();
+    document.getElementById('totalSkin').textContent = skinsData.length;
+    renderSkins('all');
+    setupSkinFilters();
   } catch (err) {
-    console.error('Gagal memuat data:', err);
+    console.error('Gagal memuat skin:', err);
+    document.getElementById('skinContent').innerHTML = 
+      '<p class="loading-text">❌ Gagal memuat data skin</p>';
   }
 }
 
-// =============================================
-// === BACA ID DARI LINK & BUKA MODAL OTOMATIS ===
-// =============================================
-function checkIdFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const skinId = params.get('id');
-  
-  if (skinId !== null) {
-    const id = parseInt(skinId);
-    const skin = allSkins.find(s => s.id === id);
-    if (skin) {
-      bukaModalSkinFull(skin);
-      updateMetaShare(skin);
-    }
-  }
+// === FILTER KATEGORI SKIN ===
+function setupSkinFilters() {
+  const tabs = document.querySelectorAll('#page-skin .filter-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const cat = tab.getAttribute('data-filter');
+      renderSkins(cat);
+    });
+  });
 }
 
-// =============================================
-// === UPDATE META UNTUK PREVIEW SHARE ===
-// =============================================
-function updateMetaShare(skin) {
-  const baseUrl = window.location.origin + window.location.pathname;
-  const shareUrl = `${baseUrl}?id=${skin.id}`;
-  
-  let ogTitle = document.querySelector('meta[property="og:title"]');
-  let ogDesc = document.querySelector('meta[property="og:description"]');
-  let ogImage = document.querySelector('meta[property="og:image"]');
-  let ogUrl = document.querySelector('meta[property="og:url"]');
-  
-  if (!ogTitle) {
-    ogTitle = document.createElement('meta');
-    ogTitle.setAttribute('property', 'og:title');
-    document.head.appendChild(ogTitle);
-  }
-  if (!ogDesc) {
-    ogDesc = document.createElement('meta');
-    ogDesc.setAttribute('property', 'og:description');
-    document.head.appendChild(ogDesc);
-  }
-  if (!ogImage) {
-    ogImage = document.createElement('meta');
-    ogImage.setAttribute('property', 'og:image');
-    document.head.appendChild(ogImage);
-  }
-  if (!ogUrl) {
-    ogUrl = document.createElement('meta');
-    ogUrl.setAttribute('property', 'og:url');
-    document.head.appendChild(ogUrl);
-  }
-  
-  ogTitle.setAttribute('content', skin.tag);
-  ogDesc.setAttribute('content', skin.deskripsi || 'Unduh gratis di ArpiMC Zone');
-  ogImage.setAttribute('content', skin.gambar);
-  ogUrl.setAttribute('content', shareUrl);
-  
-  document.title = `${skin.tag} | ArpiMC Zone`;
-}
-
-// =============================================
-// === RENDER KARTU SKIN — TIDAK ADA UNDEFINED ===
-// =============================================
-function renderSkins() {
+// === TAMPILKAN DAFTAR SKIN ===
+function renderSkins(category) {
   const container = document.getElementById('skinContent');
-  let filtered = allSkins;
-
-  if (currentFilter !== 'all') {
-    filtered = allSkins.filter(skin => skin.kategori === currentFilter);
+  let filtered = skinsData;
+  
+  if (category !== 'all') {
+    filtered = skinsData.filter(s => s.kategori === category);
   }
-
+  
   if (filtered.length === 0) {
-    container.innerHTML = '<p class="loading-text">Skin tidak ditemukan</p>';
+    container.innerHTML = '<p class="loading-text">Belum ada skin di kategori ini</p>';
     return;
   }
-
+  
   container.innerHTML = filtered.map(skin => `
     <div class="skin-card">
-      <div class="card-image-wrapper" onclick='bukaModalSkinFull(${JSON.stringify(skin).replace(/'/g, "\\'").replace(/"/g, '&quot;')})'>
+      <div class="card-img-wrap" onclick="bukaPreviewSkin(${skin.id})">
         <img src="${skin.gambar}" alt="${skin.tag}" loading="lazy">
       </div>
       <div class="card-body">
-        <h3 class="card-title">${skin.tag}</h3>
+        <p class="card-name">${skin.tag}</p>
         <div class="card-buttons">
-          <button class="card-btn preview" onclick='bukaModalSkinFull(${JSON.stringify(skin).replace(/'/g, "\\'").replace(/"/g, '&quot;')})'>Preview</button>
+          <button class="card-btn preview" onclick="bukaPreviewSkin(${skin.id})">Preview</button>
           <a href="${skin.link_download}" target="_blank" class="card-btn download">Unduh</a>
         </div>
       </div>
@@ -126,32 +94,32 @@ function renderSkins() {
   `).join('');
 }
 
-// =============================================
-// === MODAL PREVIEW SKIN — LAYAR PENUH SEPERTI GAME ===
-// =============================================
-function bukaModalSkinFull(skin) {
+// === BUKA PREVIEW SKIN ===
+function bukaPreviewSkin(id) {
+  const skin = skinsData.find(s => s.id === id);
+  if (!skin) return;
+  
   const modal = document.getElementById('skinFullModal');
-  const body = document.getElementById('skinFullBody');
   const baseUrl = window.location.origin + window.location.pathname;
   const shareUrl = `${baseUrl}?id=${skin.id}`;
   
-  history.replaceState(null, '', shareUrl);
-  updateMetaShare(skin);
+  // Update meta share untuk WhatsApp
+  updateMetaShare(skin.gambar, skin.tag, shareUrl);
   
-  body.innerHTML = `
-    <img src="${skin.gambar}" alt="${skin.tag}" loading="lazy">
-  `;
-  
-  document.getElementById('skinFullName').textContent = skin.tag;
-  document.getElementById('skinFullDesc').innerHTML = `
+  // Isi data ke modal
+  document.getElementById('skinTitle').textContent = skin.tag;
+  document.getElementById('skinPreviewImage').src = skin.gambar;
+  document.getElementById('skinPreviewImage').alt = skin.tag;
+  document.getElementById('skinInfo').innerHTML = `
     ${skin.deskripsi || 'Credit: Pemilik asli'}<br>
     📅 ${skin.tanggal_upload || 'Tanggal tidak diketahui'}
   `;
-  document.getElementById('skinFullDownload').href = skin.link_download;
+  document.getElementById('skinDownloadTop').href = skin.link_download;
+  document.getElementById('skinDownloadBtn').href = skin.link_download;
   
-  // Tombol Salin
-  document.getElementById('skinFullCopy').onclick = async () => {
-    const teks = `${skin.tag}\n👉 ${shareUrl}`;
+  // Tombol Salin Link
+  document.getElementById('skinCopyBtn').onclick = async () => {
+    const teks = `✨ ${skin.tag}\n👉 ${shareUrl}`;
     try {
       await navigator.clipboard.writeText(teks);
       alert('✅ Link disalin!');
@@ -160,70 +128,102 @@ function bukaModalSkinFull(skin) {
     }
   };
   
-  // Tombol Bagikan WA
-  document.getElementById('skinFullWA').onclick = () => {
+  // Tombol Bagikan ke WhatsApp
+  document.getElementById('skinShareWaBtn').onclick = () => {
     const teks = encodeURIComponent(`✨ ${skin.tag}\n👉 ${shareUrl}`);
     window.open(`https://wa.me/?text=${teks}`, '_blank');
   };
+  
+  // Update URL tanpa reload
+  history.replaceState({ skinId: id }, '', `?id=${skin.id}`);
   
   modal.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
 }
 
+// === TUTUP PREVIEW SKIN ===
+function tutupModalSkin() {
+  document.getElementById('skinFullModal').classList.add('hidden');
+  document.body.style.overflow = '';
+  // Kembalikan URL normal
+  history.replaceState({}, '', window.location.pathname);
+  // Kembalikan meta share ke default
+  resetMetaShare();
+}
 
-// =============================================
-// === BAGIKAN LINK KE WHATSAPP / SALIN ===
-// =============================================
-async function bagikanLink(id, tag) {
-  const baseUrl = window.location.origin + window.location.pathname;
-  const shareUrl = `${baseUrl}?id=${id}`;
+// === UPDATE META SHARE ===
+function updateMetaShare(imageUrl, title, url) {
+  const getMeta = (prop) => document.querySelector(`meta[property="${prop}"]`);
   
-  const teks = `✨ ${tag}
+  if (getMeta('og:image')) getMeta('og:image').content = imageUrl;
+  if (getMeta('og:title')) getMeta('og:title').content = title;
+  if (getMeta('og:url')) getMeta('og:url').content = url;
+}
 
-👉 Unduh di sini: ${shareUrl}
+// === KEMBALIKAN META SHARE KE DEFAULT ===
+function resetMetaShare() {
+  const getMeta = (prop) => document.querySelector(`meta[property="${prop}"]`);
+  
+  if (getMeta('og:image')) getMeta('og:image').content = 'https://files.catbox.moe/7vkqqk.jpg';
+  if (getMeta('og:title')) getMeta('og:title').content = 'ArpiMC Zone';
+  if (getMeta('og:url')) getMeta('og:url').content = window.location.origin;
+}
 
-📦 Dari ArpiMC Zone — Koleksi Skin & Addon Minecraft Gratis`;
-
-  try {
-    if (navigator.share) {
-      await navigator.share({
-        title: tag,
-        text: teks,
-        url: shareUrl
-      });
-    } else {
-      await navigator.clipboard.writeText(teks);
-      alert('✅ Link disalin!\n\n' + teks);
-    }
-  } catch (err) {
-    await navigator.clipboard.writeText(teks).catch(() => {});
-    alert('✅ Link disalin ke papan klip!');
+// === BUKA LANGSUNG SKIN DARI URL (?id=...) ===
+function handleDirectSkinLink() {
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (id) {
+    setTimeout(() => bukaPreviewSkin(parseInt(id)), 300);
   }
 }
 
-// =============================================
-// === RENDER ADDON ===
-// =============================================
-function renderAddons() {
-  const container = document.getElementById('addonContent');
-  let filtered = allAddons;
-
-  if (currentAddonFilter !== 'all') {
-    filtered = allAddons.filter(addon => addon.kategori === currentAddonFilter);
+// === MUAT DATA ADDON ===
+async function loadAddons() {
+  try {
+    const res = await fetch('addons.json');
+    addonsData = await res.json();
+    renderAddons('all');
+    setupAddonFilters();
+  } catch (err) {
+    console.error('Gagal memuat addon:', err);
+    document.getElementById('addonContent').innerHTML = 
+      '<p class="loading-text">Memuat addon...</p>';
   }
+}
 
+function setupAddonFilters() {
+  const tabs = document.querySelectorAll('#page-addon .filter-tab');
+  tabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      tabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const cat = tab.getAttribute('data-filter');
+      renderAddons(cat);
+    });
+  });
+}
+
+function renderAddons(category) {
+  const container = document.getElementById('addonContent');
+  let filtered = addonsData;
+  
+  if (category !== 'all') {
+    filtered = addonsData.filter(a => a.kategori === category);
+  }
+  
   if (filtered.length === 0) {
-    container.innerHTML = '<p class="loading-text">Addon tidak ditemukan</p>';
+    container.innerHTML = '<p class="loading-text">Belum ada addon di kategori ini</p>';
     return;
   }
-
+  
   container.innerHTML = filtered.map(addon => `
     <div class="addon-card">
-      <div class="card-image-landscape">
+      <div class="card-img-wrap" style="aspect-ratio:16/9;">
         <img src="${addon.gambar}" alt="${addon.nama || addon.tag}" loading="lazy">
       </div>
       <div class="card-body">
-        <h3 class="card-title">${addon.nama || addon.tag}</h3>
+        <p class="card-name">${addon.nama || addon.tag}</p>
         <div class="card-buttons">
           <a href="${addon.link_download || addon.link}" target="_blank" class="card-btn download">Unduh</a>
         </div>
@@ -232,160 +232,96 @@ function renderAddons() {
   `).join('');
 }
 
-// =============================================
-// === RENDER GAME ===
-// =============================================
+// === MUAT DATA GAME ===
+async function loadGames() {
+  try {
+    const res = await fetch('games.json');
+    gamesData = await res.json();
+    renderGames();
+  } catch (err) {
+    console.error('Gagal memuat game:', err);
+    document.getElementById('gameContent').innerHTML = 
+      '<p class="loading-text">Memuat game...</p>';
+  }
+}
+
 function renderGames() {
   const container = document.getElementById('gameContent');
   
-  if (allGames.length === 0) {
-    container.innerHTML = '<p class="loading-text">Game belum tersedia</p>';
+  if (gamesData.length === 0) {
+    container.innerHTML = '<p class="loading-text">Belum ada game</p>';
     return;
   }
-
-  container.innerHTML = allGames.map(game => `
-    <div class="game-card" onclick="bukaGameFull('${game.link}', '${game.nama || game.tag}')">
-      <div class="card-image-wrapper">
-        <img src="${game.gambar}" alt="${game.nama || game.tag}" loading="lazy">
+  
+  container.innerHTML = gamesData.map(game => `
+    <div class="game-card">
+      <div class="card-img-wrap" style="aspect-ratio:16/9;cursor:pointer;" onclick="bukaGame('${game.link}','${game.nama}')">
+        <img src="${game.gambar}" alt="${game.nama}" loading="lazy">
       </div>
       <div class="card-body">
-        <h3 class="card-title">${game.nama || game.tag}</h3>
-        <button class="card-btn download">▶ Buka Game</button>
+        <p class="card-name">${game.nama}</p>
+        <p style="font-size:12px;color:var(--text-secondary);margin-bottom:8px;">${game.deskripsi || ''}</p>
+        <button class="card-btn preview" style="width:100%;" onclick="bukaGame('${game.link}','${game.nama}')">Mainkan ▶</button>
       </div>
     </div>
   `).join('');
 }
 
-// =============================================
-// === MODAL GAME FULL SCREEN ===
-// =============================================
-function bukaGameFull(link, nama) {
-  const modal = document.getElementById('gameFullModal');
-  const iframe = document.getElementById('gameIframeFull');
-  const tabBtn = document.getElementById('gameOpenTabBtn');
+// === BUKA GAME DI IFRAME ===
+function bukaGame(link, nama) {
+  const modal = document.getElementById('gameModal');
+  document.getElementById('gameTitle').textContent = nama;
+  document.getElementById('gameIframe').src = link;
+  document.getElementById('gameNewTab').href = link;
   
-  iframe.src = link;
-  tabBtn.href = link;
   modal.classList.remove('hidden');
   document.body.style.overflow = 'hidden';
 }
 
-function tutupGameFull() {
-  const modal = document.getElementById('gameFullModal');
-  const iframe = document.getElementById('gameIframeFull');
-  modal.classList.add('hidden');
-  iframe.src = '';
+function tutupModalGame() {
+  document.getElementById('gameModal').classList.add('hidden');
+  document.getElementById('gameIframe').src = '';
   document.body.style.overflow = '';
 }
 
-// =============================================
-// === NAVIGASI BAWAH ===
-// =============================================
-function setupNavigation() {
-  const navTabs = document.querySelectorAll('.bottom-nav-item');
-  const pages = document.querySelectorAll('.page-section');
-
-  navTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const targetPage = tab.getAttribute('data-page');
-      
-      navTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      
-      pages.forEach(page => {
-        page.classList.remove('active');
-        if (page.id === `page-${targetPage}`) {
-          page.classList.add('active');
-        }
-      });
-      
-      tutupModalSkinFull();
-      tutupGameFull();
-    });
-  });
-}
-
-// =============================================
-// === FILTER KATEGORI ===
-// =============================================
-function setupSkinFilter() {
-  const filterTabs = document.querySelectorAll('#page-skin .filter-tab');
+// === PANEL TEMA ===
+function setupThemePanel() {
+  const themeBtn = document.getElementById('themeToggle');
+  const panel = document.getElementById('themePanel');
+  const closeBtn = document.getElementById('closeThemePanel');
+  const choices = document.querySelectorAll('.theme-choice');
   
-  filterTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      filterTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentFilter = tab.getAttribute('data-filter');
-      renderSkins();
-    });
-  });
-}
-
-function setupAddonFilter() {
-  const filterTabs = document.querySelectorAll('#page-addon .filter-tab');
-  
-  filterTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      filterTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentAddonFilter = tab.getAttribute('data-filter');
-      renderAddons();
-    });
-  });
-}
-
-// =============================================
-// === TEMA ===
-// =============================================
-function setupThemes() {
+  // Muat tema yang tersimpan
   const savedTheme = localStorage.getItem('arpimc-theme') || 'default';
   document.documentElement.setAttribute('data-theme', savedTheme);
   
-  const themeBtn = document.getElementById('themeToggle');
-  const themePanel = document.getElementById('themePanel');
-  const closePanel = document.getElementById('closeThemePanel');
-  const themeOptions = document.querySelectorAll('.theme-option');
-  
   themeBtn.addEventListener('click', () => {
-    themePanel.classList.toggle('hidden');
+    panel.classList.remove('hidden');
   });
   
-  closePanel.addEventListener('click', () => {
-    themePanel.classList.add('hidden');
+  closeBtn.addEventListener('click', () => {
+    panel.classList.add('hidden');
   });
   
-  themeOptions.forEach(option => {
-    option.addEventListener('click', () => {
-      const theme = option.getAttribute('data-theme');
+  // Tutup saat klik luar panel
+  panel.addEventListener('click', (e) => {
+    if (e.target === panel) panel.classList.add('hidden');
+  });
+  
+  choices.forEach(choice => {
+    choice.addEventListener('click', () => {
+      const theme = choice.getAttribute('data-theme');
       document.documentElement.setAttribute('data-theme', theme);
       localStorage.setItem('arpimc-theme', theme);
-      themePanel.classList.add('hidden');
+      panel.classList.add('hidden');
     });
   });
 }
 
-// =============================================
-// === PWA ===
-// =============================================
-let deferredPrompt;
-function setupPWA() {
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-  });
-  window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-  });
-}
-
-// =============================================
-// === INISIALISASI ===
-// =============================================
-document.addEventListener('DOMContentLoaded', () => {
-  setupNavigation();
-  setupSkinFilter();
-  setupAddonFilter();
-  setupThemes();
-  setupPWA();
-  loadAllData();
+// === TUTUP MODAL DENGAN TOMBOL ESC ===
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    tutupModalSkin();
+    tutupModalGame();
+  }
 });

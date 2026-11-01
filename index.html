@@ -14,7 +14,7 @@
     <meta property="og:image" content="https://files.catbox.moe/7vkqqk.jpg">
     <meta property="og:type" content="website">
     
-    <link rel="icon" type="image/png" href="https://files.catbox.moe/7z9rs0.png">
+    <link rel="icon" type="image/png" href="https://files.catbox.moe/7vkqqk.jpg">
     <link rel="stylesheet" href="style.css">
 </head>
 <body data-theme="default">
@@ -53,6 +53,19 @@
         </div>
     </div>
 </aside>
+
+<!-- ===== MODAL PILIH GAMBAR COSLO ===== -->
+<div id="cosloModal" class="coslo-modal" style="display: none;">
+    <div class="coslo-content">
+        <h3>🎨 Tema Coslo</h3>
+        <p>Pilih gambar dari perangkatmu untuk jadi latar belakang</p>
+        <input type="file" id="cosloImageInput" accept="image/*" class="file-input">
+        <div class="coslo-buttons">
+            <button onclick="closeCosloModal()" class="cancel-btn">Batal</button>
+            <button onclick="resetCoslo()" class="reset-btn">Hapus Latar</button>
+        </div>
+    </div>
+</div>
 
 <!-- ===== MAIN CONTENT ===== -->
 <main id="mainContent">
@@ -116,7 +129,7 @@
                 <button class="filter-tab" data-filter="lain">Lain-lain</button>
             </div>
 
-            <div class="cards-grid two-col" id="addonGrid">
+            <div class="addon-grid" id="addonGrid">
                 <!-- Addon dimuat dari JS -->
             </div>
         </div>
@@ -157,36 +170,23 @@
     </section>
 </main>
 
-<!-- ===== PREVIEW MODAL ===== -->
-<div class="modal-overlay" id="previewModal">
-    <div class="modal-container">
-        <div class="modal-header">
-            <button class="back-btn" onclick="closePreviewModal()">← Kembali</button>
-            <h3 id="modalTitle">Preview</h3>
-            <button class="modal-download-btn" id="modalTopDownload" style="display:none;">Unduh</button>
+<!-- ===== HALAMAN PREVIEW PENUH — Skin, Addon, Game ===== -->
+<div id="fullPreviewPage" class="full-preview-page" style="display: none;">
+    <div class="preview-header">
+        <button class="back-btn" onclick="closeFullPreview()">← Kembali</button>
+        <h2 id="fullPreviewTitle">Preview</h2>
+        <div class="preview-actions">
+            <button id="fullCopyLink" class="action-btn copy-btn">🔗 Salin Link</button>
+            <button id="fullShareWA" class="action-btn wa-btn">💬 WhatsApp</button>
+            <a id="fullDownload" class="action-btn download-btn" target="_blank">⬇️ Unduh</a>
         </div>
-        
-        <div class="modal-body">
-            <div class="modal-image-wrap">
-                <img id="modalImage" src="" alt="Preview">
-            </div>
-            
-            <div class="modal-info">
-                <p id="modalDesc" class="modal-desc"></p>
-                <p class="modal-meta" id="modalMeta"></p>
-            </div>
-            
-            <!-- Tombol Aksi -->
-            <div class="modal-actions">
-                <button class="action-btn copy-btn" id="modalCopyLink">🔗 Salin Link</button>
-                <button class="action-btn wa-btn" id="modalShareWA">💬 WhatsApp</button>
-                <a class="action-btn support-btn" href="#" target="_blank" id="modalSupport">💜 Dukung</a>
-            </div>
-            
-            <!-- Tombol Download -->
-            <div class="modal-download-area" id="modalDownloadArea">
-                <button class="download-btn full-btn" id="modalMainDownload">📥 Unduh</button>
-            </div>
+    </div>
+    <div class="preview-content-wrap">
+        <img id="previewImageFull" src="" alt="Preview" style="display: none;">
+        <iframe id="previewIframe" class="preview-iframe" frameborder="0" style="display: none;"></iframe>
+        <div class="preview-text-content" id="previewTextContent" style="display: none; padding: 20px;">
+            <img id="previewOnlyImage" src="" alt="" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+            <p id="previewDescFull" style="color: var(--text-light); line-height: 1.6; margin-bottom: 20px;"></p>
         </div>
     </div>
 </div>
@@ -240,38 +240,5 @@
 <div class="toast" id="toast"></div>
 
 <script src="script.js"></script>
-    <!-- HALAMAN PREVIEW PENUH -->
-<div id="fullPreviewPage" class="full-preview-page" style="display: none;">
-    <div class="preview-header">
-        <button class="back-btn" onclick="closeFullPreview()">← Kembali</button>
-        <h2 id="fullPreviewTitle">Preview</h2>
-        <div class="preview-actions">
-            <button id="fullCopyLink" class="action-btn copy-btn">🔗 Salin Link</button>
-            <button id="fullShareWA" class="action-btn wa-btn">💬 WhatsApp</button>
-            <a id="fullDownload" class="action-btn download-btn" target="_blank">⬇️ Unduh</a>
-        </div>
-    </div>
-    <iframe id="previewIframe" class="preview-iframe" frameborder="0"></iframe>
-</div>
-
-<!-- MODAL PILIH GAMBAR COSLO -->
-<div id="cosloModal" class="coslo-modal" style="display: none;">
-    <div class="coslo-content">
-        <h3>🎨 Tema Coslo</h3>
-        <p>Pilih gambar dari perangkatmu untuk jadi latar belakang</p>
-        <input type="file" id="cosloImageInput" accept="image/*" class="file-input">
-        <div class="coslo-buttons">
-            <button onclick="closeCosloModal()" class="cancel-btn">Batal</button>
-            <button onclick="resetCoslo()" class="reset-btn">Hapus Latar</button>
-        </div>
-    </div>
-</div>
-<!-- Modal preview -->
-    <div class="skin-card" onclick="openSkinPreview('link-gambar-skin.png', 'Nama Skin', 'Deskripsi skin...')">
-    <img src="link-gambar-skin.png" alt="Skin">
-    <h3>Nama Skin</h3>
-    <button>Preview</button>
-</div>
-
 </body>
 </html>

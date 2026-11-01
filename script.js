@@ -596,3 +596,33 @@ function showToast(pesan) {
 window.addEventListener('popstate', () => {
     closeFullPreview();
 });
+// Preview Skin Full Page
+function openSkinPreview(imgSrc, title, desc) {
+    document.getElementById('previewImage').src = imgSrc;
+    document.getElementById('previewTitle').textContent = title;
+    document.getElementById('previewDesc').textContent = desc;
+    document.getElementById('previewModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// Preview Addon Full Page
+function openAddonPreview(imgSrc, title, desc) {
+    document.getElementById('previewImage').src = imgSrc;
+    document.getElementById('previewTitle').textContent = title;
+    document.getElementById('previewDesc').textContent = desc;
+    document.getElementById('previewModal').style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+// Tutup Preview
+function closePreview() {
+    document.getElementById('previewModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+}
+
+// Tutup preview jika klik luar konten
+document.getElementById('previewModal').addEventListener('click', function(e) {
+    if (e.target === this) {
+        closePreview();
+    }
+});

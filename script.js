@@ -545,3 +545,168 @@ document.getElementById('coupleModal').addEventListener('click', (e) => {
 document.getElementById('jjModal').addEventListener('click', (e) => {
     if (e.target.id === 'jjModal') closeJJModal();
 });
+    document.getElementById('previewModal').classList.add('active');
+    document.body.style.overflow = 'hidden';
+}
+
+function closePreviewModal() {
+    document.getElementById('previewModal').classList.remove('active');
+    document.body.style.overflow = '';
+    // Kembalikan URL ke aslinya
+    history.pushState({}, '', window.location.pathname);
+    currentData = null;
+}
+
+// ---------- FUNGSI UNDUH: Skin, Couple, Skin JJ ----------
+function handleDownload(item) {
+    const kategori = item.kategori || '';
+    
+    if (kategori === 'couple') {
+        // Tampilkan pilihan Couple
+        document.getElementById('coupleModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        document.getElementById('dlCowok').onclick = () => {
+            if (item.unduh_cowok) window.open(item.unduh_cowok, '_blank');
+            closeCoupleModal();
+            showToast('Mulai mengunduh Cowok...');
+        };
+        document.getElementById('dlCewek').onclick = () => {
+            if (item.unduh_cewek) window.open(item.unduh_cewek, '_blank');
+            closeCoupleModal();
+            showToast('Mulai mengunduh Cewek...');
+        };
+        return;
+    }
+    
+    if (kategori === 'jj') {
+        // Tampilkan pilihan Skin JJ
+        document.getElementById('jjModal').classList.add('active');
+        document.body.style.overflow = 'hidden';
+        
+        document.getElementById('dlJJSkin').onclick = () => {
+            if (item.file_skin || item.skin) window.open(item.file_skin || item.skin, '_blank');
+            closeJJModal();
+            showToast('Mengunduh Skin...');
+        };
+        document.getElementById('dlJJImg').onclick = () => {
+            if (item.gambar) window.open(item.gambar, '_blank');
+            closeJJModal();
+            showToast('Mengunduh Gambar...');
+        };
+        document.getElementById('dlJJAll').onclick = () => {
+            if (item.zip_semua || item.zip) window.open(item.zip_semua || item.zip, '_blank');
+            closeJJModal();
+            showToast('Mengunduh Semua...');
+        };
+        return;
+    }
+    
+    // Unduh biasa
+    const link = item.file || item.download || item.link || '#';
+    window.open(link, '_blank');
+    showToast('Mulai mengunduh...');
+}
+
+function closeCoupleModal() {
+    document.getElementById('coupleModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+function closeJJModal() {
+    document.getElementById('jjModal').classList.remove('active');
+    document.body.style.overflow = '';
+}
+
+// ---------- BUKA LANGSUNG DARI URL ?kategori-id=nomor ----------
+function handleUrlSlug() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.size === 0) return;
+    
+    const query = window.location.search.slice(1); // hapus tanda ?
+    
+    // Format: cowok-id=1, cewek-id=2, dst
+    const match = query.match(/^([\w]+)-id=(\d+)$/);
+    if (!match) return;
+    
+    const targetKategori = match[1];
+    const targetId = parseInt(match[2]);
+    
+    // Tunggu data dimuat dulu
+    const checkData = setInterval(() => {
+        let foundItem = null;
+        let foundType = 'skin';
+        
+        // Cari di Skin
+        foundItem = allSkins.find(s => 
+            String(s.kategori) === targetKategori && s.id === targetId
+        );
+        
+        // Cari di Addon
+        if (!foundItem) {
+            foundItem = allAddons.find(a => 
+                String(a.kategori) === targetKategori && a.id === targetId
+            );
+            foundType = 'addon';
+        }
+        
+        // Cari di Game
+        if (!foundItem) {
+            foundItem = allGames.find(g => 
+                String(g.kategori) === targetKategori && g.id === targetId
+            );
+            foundType = 'game';
+        }
+        
+        if (foundItem) {
+            clearInterval(checkData);
+            // Pindah ke halaman yang benar
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            if (foundType === 'skin') {
+                document.querySelector('[data-page="skinPage"]').classList.add('active');
+                document.getElementById('skinPage').classList.add('active');
+            } else if (foundType === 'addon') {
+                document.querySelector('[data-page="addonPage"]').classList.add('active');
+                document.getElementById('addonPage').classList.add('active');
+            } else if (foundType === 'game') {
+                document.querySelector('[data-page="gamePage"]').classList.add('active');
+                document.getElementById('gamePage').classList.add('active');
+            }
+            // Buka preview setelah halaman siap
+            setTimeout(() => openPreviewModal(foundItem, foundType), 100);
+        }
+    }, 100);
+    
+    // Berhenti cek setelah 10 detik
+    setTimeout(() => clearInterval(checkData), 10000);
+}
+
+// ---------- KEMBALI KE BERANDA ----------
+function goHome() {
+    history.pushState({}, '', window.location.pathname);
+    closePreviewModal();
+}
+
+// ---------- NOTIFIKASI TOAST ----------
+function showToast(pesan) {
+    const toast = document.getElementById('toast');
+    toast.textContent = pesan;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 2500);
+}
+
+// ---------- TUTUP MODAL KETIK KLIK LUAR ----------
+document.getElementById('previewModal').addEventListener('click', (e) => {
+    if (e.target.id === 'previewModal') closePreviewModal();
+});
+document.getElementById('coupleModal').addEventListener('click', (e) => {
+    if (e.target.id === 'coupleModal') closeCoupleModal();
+});
+document.getElementById('jjModal').addEventListener('click', (e) => {
+    if (e.target.id === 'jjModal') closeJJModal();
+});
+
+// Tangani tombol kembali browser
+window.addEventListener('popstate', () => {
+    closePreviewModal();
+});

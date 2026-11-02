@@ -4,13 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArpiMC Zone</title>
-    <meta name="description" content="Koleksi skin, addon, dan game Minecraft gratis selamanya">
+    <meta name="description" content="Koleksi skin, addon, dan game Minecraft gratis">
     <meta name="theme-color" content="#2563eb">
     <link rel="manifest" href="manifest.json">
     
-    <!-- Open Graph untuk WhatsApp Share Preview -->
+    <!-- Open Graph -->
     <meta property="og:title" content="ArpiMC Zone">
-    <meta property="og:description" content="Koleksi Minecraft Gratis Selamanya">
+    <meta property="og:description" content="Gratis selamanya">
     <meta property="og:image" content="https://files.catbox.moe/7vkqqk.jpg">
     <meta property="og:type" content="website">
     
@@ -19,9 +19,7 @@
 </head>
 <body data-theme="default">
 
-<!-- ==========================================
-    HEADER
-========================================== -->
+<!-- HEADER -->
 <header class="site-header">
     <a href="#" class="site-brand" onclick="goHome(); return false;">
         <img src="https://files.catbox.moe/7vkqqk.jpg" alt="Logo" class="site-logo">
@@ -30,16 +28,13 @@
     <button class="menu-btn" id="menuToggle" aria-label="Menu">☰</button>
 </header>
 
-<!-- ==========================================
-    SIDEBAR
-========================================== -->
+<!-- SIDEBAR -->
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 <aside class="sidebar" id="sidebar">
     <div class="sidebar-head">
         <h3>Pengaturan</h3>
-        <button class="close-btn" id="closeSidebar">×</button>
+        <button class="close-btn" id="closeSidebar">&times;</button>
     </div>
-    
     <div class="sidebar-section">
         <h4>Pilih Tema</h4>
         <div class="theme-list">
@@ -47,28 +42,23 @@
             <button class="theme-option" data-theme="neobrutaslim">Neo Brutaslim</button>
             <button class="theme-option" data-theme="gelap">Gelap</button>
             <button class="theme-option" data-theme="pink">Pink</button>
-            <button class="theme-option coslo-btn" data-theme="coslo">🖼️ Coslo</button>
+            <button class="theme-option coslo-btn" data-theme="coslo" onclick="openCosloModal()">🖼️ Coslo</button>
         </div>
     </div>
 </aside>
 
-<!-- ==========================================
-    MODAL SETTING COSLO — Upload + Efek
-========================================== -->
+<!-- MODAL COSLO -->
 <div id="cosloModal" class="modal-wrap" style="display: none;">
     <div class="modal-box coslo-box">
         <h3>🎨 Pengaturan Coslo</h3>
-        
         <div class="coslo-upload">
-            <label class="upload-label">Pilih Gambar/Video Latar</label>
-            <input type="file" id="cosloFile" accept="image/*,video/*" class="file-input">
-            <div class="file-hint">Disimpan di perangkat saja, tidak diunggah ke server</div>
+            <label class="upload-label">Pilih Gambar Latar</label>
+            <input type="file" id="cosloFile" accept="image/*" class="file-input">
+            <div class="file-hint">Disimpan di perangkat saja</div>
         </div>
-        
         <div class="coslo-preview-wrap" id="cosloPreviewWrap" style="display: none;">
             <img id="cosloPreviewImg" class="preview-img" alt="Preview">
         </div>
-        
         <div class="coslo-controls">
             <div class="control-group">
                 <label>Kontras: <span id="contrastVal">100</span>%</label>
@@ -83,7 +73,6 @@
                 <input type="range" id="cosloBright" min="50" max="150" value="100" class="slider">
             </div>
         </div>
-        
         <div class="coslo-buttons">
             <button class="btn secondary" onclick="closeCosloModal()">Batal</button>
             <button class="btn danger" onclick="resetCoslo()">Reset</button>
@@ -92,11 +81,9 @@
     </div>
 </div>
 
-<!-- ==========================================
-    KONTEN UTAMA
-========================================== -->
+<!-- KONTEN UTAMA -->
 <main>
-    <!-- === HALAMAN SKIN === -->
+    <!-- HALAMAN SKIN -->
     <section id="skinPage" class="page active">
         <div class="wrap">
             <div class="page-head">
@@ -104,7 +91,6 @@
                 <p>Gratis selamanya — langsung unduh tanpa ribet</p>
                 <div class="count-badge">Total: <span id="skinCount">0</span></div>
             </div>
-            
             <div class="filter-bar" id="skinFilters">
                 <button class="tab-btn active" data-filter="semua">Semua</button>
                 <button class="tab-btn" data-filter="cowok">Cowok</button>
@@ -115,19 +101,19 @@
                 <button class="tab-btn" data-filter="couple">Couple</button>
                 <button class="tab-btn" data-filter="jj">Skin JJ</button>
             </div>
-            
-            <div class="grid-col-2" id="skinGrid"></div>
+            <div class="grid-col-2" id="skinGrid">
+                <div class="empty-state"><p>Memuat data...</p></div>
+            </div>
         </div>
     </section>
 
-    <!-- === HALAMAN ADDON === -->
+    <!-- HALAMAN ADDON -->
     <section id="addonPage" class="page">
         <div class="wrap">
             <div class="page-head">
                 <h2>Koleksi Addon</h2>
                 <p>Addon, Resource Pack, Shader & UI Minecraft Bedrock</p>
             </div>
-            
             <div class="filter-bar" id="addonFilters">
                 <button class="tab-btn active" data-filter="semua">Semua</button>
                 <button class="tab-btn" data-filter="addon">Addon</button>
@@ -139,44 +125,45 @@
                 <button class="tab-btn" data-filter="survival">Survival</button>
                 <button class="tab-btn" data-filter="lain">Lain-lain</button>
             </div>
-            
-            <div class="addon-list" id="addonGrid"></div>
+            <div class="addon-list" id="addonGrid">
+                <div class="empty-state"><p>Memuat data...</p></div>
+            </div>
         </div>
     </section>
 
-    <!-- === HALAMAN GAME === -->
+    <!-- HALAMAN GAME -->
     <section id="gamePage" class="page">
         <div class="wrap">
             <div class="page-head">
                 <h2>Mini Game & Alat</h2>
                 <p>Mainkan langsung di browser, gratis!</p>
             </div>
-            
             <div class="filter-bar" id="gameFilters">
                 <button class="tab-btn active" data-filter="semua">Semua</button>
                 <button class="tab-btn" data-filter="game">Game</button>
                 <button class="tab-btn" data-filter="tools">Alat</button>
             </div>
-            
-            <div class="grid-col-2" id="gameGrid"></div>
+            <div class="grid-col-2" id="gameGrid">
+                <div class="empty-state"><p>Memuat data...</p></div>
+            </div>
         </div>
     </section>
 
-    <!-- === HALAMAN INFO === -->
+    <!-- HALAMAN INFO -->
     <section id="infoPage" class="page">
         <div class="wrap">
             <div class="page-head">
                 <h2>Tentang ArpiMC Zone</h2>
                 <p id="infoDesc">Memuat informasi...</p>
             </div>
-            <div id="infoContent"></div>
+            <div id="infoContent">
+                <div class="empty-state"><p>Memuat data...</p></div>
+            </div>
         </div>
     </section>
 </main>
 
-<!-- ==========================================
-    HALAMAN PREVIEW — Skin / Addon / Game
-========================================== -->
+<!-- HALAMAN PREVIEW -->
 <div id="previewPage" class="preview-page" style="display: none;">
     <div class="preview-top">
         <button class="back-btn" onclick="closePreviewPage()">← Kembali</button>
@@ -184,56 +171,22 @@
         <div class="preview-top-actions">
             <button id="copyLinkBtn" class="icon-btn" title="Salin Link">🔗</button>
             <button id="shareWABtn" class="icon-btn" title="Bagikan WA">💬</button>
-            <a id="dlBtn" class="icon-btn" target="_blank" title="Unduh">⬇️</a>
+            <a id="dlBtn" class="icon-btn" target="_blank" title="Unduh" style="display:none;">⬇️</a>
         </div>
     </div>
-    
     <div class="preview-body">
-        <!-- Skin & Addon tampil di sini -->
         <div id="previewMedia" class="preview-media" style="display: none;">
-            <img id="previewMainImg" src="" alt="" loading="lazy">
+            <img id="previewMainImg" src="" alt="">
         </div>
-        
-        <!-- Game tampil di sini -->
         <iframe id="previewGameFrame" class="game-frame" style="display: none;" frameborder="0"></iframe>
-        
         <div class="preview-info" id="previewInfoBlock" style="display: none;">
             <h3 id="previewName"></h3>
             <p id="previewDescText" class="preview-desc"></p>
-            <div class="preview-meta" id="previewMetaInfo"></div>
         </div>
     </div>
 </div>
 
-<!-- ==========================================
-    MODAL PILIHAN UNDUH
-========================================== -->
-<div class="modal-wrap" id="coupleModal" style="display: none;">
-    <div class="modal-box small">
-        <h3>Pilih Unduhan</h3>
-        <div class="btn-group">
-            <button class="btn full" id="dlCowok">👦 Skin Cowok</button>
-            <button class="btn full" id="dlCewek">👧 Skin Cewek</button>
-        </div>
-        <button class="btn text" onclick="closeCoupleModal()">Batal</button>
-    </div>
-</div>
-
-<div class="modal-wrap" id="jjModal" style="display: none;">
-    <div class="modal-box small">
-        <h3>Pilihan Unduhan</h3>
-        <div class="btn-group">
-            <button class="btn full" id="dlJJSkin">📥 File Skin</button>
-            <button class="btn full" id="dlJJImg">🖼️ Gambar Preview</button>
-            <button class="btn full" id="dlJJAll">📦 Semua (.zip)</button>
-        </div>
-        <button class="btn text" onclick="closeJJModal()">Batal</button>
-    </div>
-</div>
-
-<!-- ==========================================
-    NAVIGASI BAWAH
-========================================== -->
+<!-- NAVIGASI BAWAH -->
 <nav class="bottom-nav">
     <button class="nav-link active" data-page="skinPage">
         <span class="nav-emoji">🎨</span>
@@ -253,7 +206,7 @@
     </button>
 </nav>
 
-<!-- Notifikasi -->
+<!-- NOTIFIKASI -->
 <div class="toast-box" id="toastBox"></div>
 
 <script src="script.js"></script>

@@ -1,5 +1,5 @@
 /* ==========================================
-   ARPIMC ZONE — STYLE.CSS VERSI LENGKAP
+   ARPIMC ZONE — STYLE.CSS
    ========================================== */
 
 /* ---------- VARIABEL TEMA ---------- */
@@ -11,7 +11,6 @@
     --border-color: #e2e8f0;
     --primary: #2563eb;
     --secondary: #f1f5f9;
-    --accent: #6366f1;
     --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
     --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
     --radius-sm: 8px;
@@ -39,7 +38,6 @@
     --shadow-md: 5px 5px 0 rgba(0,0,0,0.9);
     --radius-sm: 4px;
     --radius-md: 4px;
-    --radius-lg: 8px;
 }
 
 [data-theme="pink"] {
@@ -50,7 +48,6 @@
     --border-color: #f7c8dc;
     --primary: #ec4899;
     --secondary: #fce7f3;
-    --accent: #f472b6;
 }
 
 [data-theme="coslo"] {
@@ -61,10 +58,6 @@
     --border-color: rgba(0,0,0,0.1);
     --secondary: rgba(241,245,249,0.9);
     --backdrop: blur(12px);
-}
-
-[data-theme="coslo"] body {
-    background: transparent;
 }
 
 * {
@@ -80,7 +73,7 @@ body {
     line-height: 1.6;
     min-height: 100vh;
     padding-bottom: 80px;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, filter 0.3s;
 }
 
 body.coslo-active {
@@ -263,24 +256,13 @@ input[type="file"] {
     padding: 24px;
 }
 
-.modal-box.small {
-    max-width: 320px;
-    padding: 20px;
-    text-align: center;
-}
-
 .modal-box h3 {
     font-size: 18px;
     margin-bottom: 16px;
     text-align: center;
 }
 
-/* ---------- MODAL COSLO — PENGATURAN ---------- */
-.coslo-box h3 {
-    text-align: center;
-    margin-bottom: 8px;
-}
-
+/* ---------- MODAL COSLO ---------- */
 .coslo-upload {
     margin-bottom: 16px;
 }
@@ -382,25 +364,6 @@ input[type="file"] {
     color: #b91c1c;
 }
 
-.btn.text {
-    background: transparent;
-    color: var(--primary);
-    width: 100%;
-    margin-top: 8px;
-}
-
-.btn.full {
-    width: 100%;
-    margin-bottom: 8px;
-}
-
-.btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    margin-bottom: 12px;
-}
-
 /* ---------- KONTEN UTAMA ---------- */
 .wrap {
     padding: 20px 16px;
@@ -481,7 +444,7 @@ input[type="file"] {
     border-radius: var(--radius-md);
     overflow: hidden;
     border: 1px solid var(--border-color);
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s;
 }
 
 .card:active {
@@ -517,6 +480,7 @@ input[type="file"] {
     border-radius: var(--radius-sm);
     font-size: 13px;
     font-weight: 500;
+    text-align: center;
 }
 
 .card-btn.preview {
@@ -529,7 +493,7 @@ input[type="file"] {
     color: white;
 }
 
-/* ---------- DAFTAR ADDON — LANDSCAPE ---------- */
+/* ---------- DAFTAR ADDON ---------- */
 .addon-list {
     display: flex;
     flex-direction: column;
@@ -588,6 +552,7 @@ input[type="file"] {
     border-radius: var(--radius-sm);
     font-size: 12px;
     font-weight: 500;
+    text-align: center;
 }
 
 .addon-btn.preview {
@@ -600,7 +565,7 @@ input[type="file"] {
     color: white;
 }
 
-/* ---------- HALAMAN PREVIEW PENUH ---------- */
+/* ---------- HALAMAN PREVIEW ---------- */
 .preview-page {
     position: fixed;
     inset: 0;
@@ -655,19 +620,9 @@ input[type="file"] {
     color: var(--text-color);
 }
 
-.icon-btn[href] {
-    text-decoration: none;
-}
-
 .preview-body {
     flex: 1;
     overflow-y: auto;
-    position: relative;
-}
-
-.preview-media {
-    width: 100%;
-    background: #000;
 }
 
 .preview-media img {
@@ -678,7 +633,7 @@ input[type="file"] {
 
 .game-frame {
     width: 100%;
-    height: calc(100vh - 130px);
+    height: calc(100vh - 100px);
     border: none;
     display: block;
 }
@@ -696,22 +651,6 @@ input[type="file"] {
     font-size: 15px;
     color: var(--text-light);
     line-height: 1.7;
-    margin-bottom: 16px;
-}
-
-.preview-meta {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-bottom: 20px;
-}
-
-.meta-tag {
-    font-size: 12px;
-    padding: 4px 10px;
-    background: var(--secondary);
-    border-radius: 20px;
-    color: var(--text-light);
 }
 
 /* ---------- HALAMAN INFO ---------- */
@@ -850,8 +789,6 @@ input[type="file"] {
 /* ---------- KOSONG ---------- */
 .empty-state {
     text-align: center;
-   .empty-state {
-    text-align: center;
     padding: 40px 20px;
     color: var(--text-light);
 }
@@ -872,17 +809,4 @@ input[type="file"] {
         width: 90px;
         height: 90px;
     }
-    
-    .preview-top h2 {
-        font-size: 15px;
-    }
-    
-    .coslo-buttons {
-        flex-wrap: wrap;
-    }
-}
-
-/* Untuk Coslo filter */
-body.coslo-active {
-    transition: filter 0.3s ease;
 }

@@ -1,585 +1,168 @@
-/* ==========================================
-   ARPIMC ZONE — STYLE.CSS LENGKAP
-   ========================================== */
-
-/* ---------- VARIABEL TEMA ---------- */
-:root {
-    --bg: #f8fafc;
-    --card: #ffffff;
-    --text: #1e293b;
-    --text-secondary: #64748b;
-    --border: #e2e8f0;
-    --primary: #2563eb;
-    --secondary: #f1f5f9;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
-    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-    --radius: 12px;
-    --radius-sm: 8px;
-}
-
-[data-theme="gelap"] {
-    --bg: #0f172a;
-    --card: #1e293b;
-    --text: #f1f5f9;
-    --text-secondary: #94a3b8;
-    --border: #334155;
-    --secondary: #334155;
-}
-
-[data-theme="neobrutaslim"] {
-    --bg: #fffdf9;
-    --card: #ffffff;
-    --text: #1a1a1a;
-    --text-secondary: #787774;
-    --border: #1a1a1a;
-    --secondary: #f5f4f0;
-    --shadow-sm: 3px 3px 0 rgba(0,0,0,0.9);
-    --shadow-md: 5px 5px 0 rgba(0,0,0,0.9);
-    --radius: 4px;
-    --radius-sm: 4px;
-}
-
-[data-theme="pink"] {
-    --bg: #fff1f7;
-    --card: #ffffff;
-    --text: #4a1937;
-    --text-secondary: #9d6b85;
-    --border: #f7c8dc;
-    --primary: #ec4899;
-    --secondary: #fce7f3;
-}
-
-[data-theme="coslo"] {
-    --bg: transparent;
-    --card: rgba(255,255,255,0.85);
-    --text: #1a1a1a;
-    --text-secondary: #666666;
-    --border: rgba(0,0,0,0.1);
-    --secondary: rgba(241,245,249,0.9);
-    backdrop-filter: blur(12px);
-}
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: sans-serif;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    min-height: 100vh;
+    background: #f5f5f5;
+    color: #333;
     padding-bottom: 80px;
-    transition: background-color 0.3s, color 0.3s, filter 0.3s;
 }
 
-body.coslo-active {
-    background-size: cover;
-    background-position: center center;
-    background-attachment: fixed;
-    background-repeat: no-repeat;
+/* HEADER */
+.header {
+    background: #2563eb;
+    color: white;
+    padding: 16px;
+    text-align: center;
+    font-size: 18px;
+    font-weight: bold;
 }
 
-img {
-    max-width: 100%;
-    display: block;
-}
-
-button {
-    font-family: inherit;
-    cursor: pointer;
-    border: none;
-    background: none;
-}
-
-a {
-    text-decoration: none;
-    color: inherit;
-}
-
-/* ---------- HEADER ---------- */
-.site-header {
+/* NAVIGASI */
+.nav {
+    display: flex;
+    background: white;
+    border-bottom: 1px solid #ddd;
     position: sticky;
     top: 0;
-    z-index: 99;
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    padding: 12px 16px;
+    z-index: 100;
 }
 
-.header-inner {
-    max-width: 700px;
-    margin: 0 auto;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-}
-
-.logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 700;
-    font-size: 17px;
-    color: var(--text);
-}
-
-.logo img {
-    width: 36px;
-    height: 36px;
-    border-radius: var(--radius-sm);
-    object-fit: cover;
-}
-
-.menu-toggle {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    padding: 8px;
-}
-
-.menu-toggle span {
-    width: 22px;
-    height: 2px;
-    background: var(--text);
-    border-radius: 2px;
-    transition: 0.2s;
-}
-
-/* ---------- SIDEBAR ---------- */
-.sidebar-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.5);
-    z-index: 198;
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.2s;
-}
-
-.sidebar-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.sidebar {
-    position: fixed;
-    top: 0;
-    right: 0;
-    width: 300px;
-    max-width: 85vw;
-    height: 100vh;
-    background: var(--card);
-    z-index: 199;
-    transform: translateX(100%);
-    transition: transform 0.3s ease;
-    overflow-y: auto;
-}
-
-.sidebar.active {
-    transform: translateX(0);
-}
-
-.sidebar-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-}
-
-.sidebar-header h3 {
-    font-size: 18px;
-    font-weight: 600;
-}
-
-.close-sidebar {
-    font-size: 24px;
-    color: var(--text-secondary);
-    line-height: 1;
-}
-
-.sidebar-section {
-    padding: 20px;
-}
-
-.sidebar-section h4 {
-    font-size: 15px;
-    font-weight: 600;
-    margin-bottom: 12px;
-    color: var(--text-secondary);
-}
-
-.theme-options {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.theme-btn {
-    text-align: left;
-    width: 100%;
-    padding: 12px 16px;
-    border-radius: var(--radius-sm);
-    background: var(--secondary);
-    color: var(--text);
+.nav-btn {
+    flex: 1;
+    padding: 12px 8px;
+    border: none;
+    background: none;
     font-size: 14px;
-    transition: 0.2s;
-}
-
-.theme-btn.active {
-    background: var(--primary);
-    color: white;
-}
-
-.coslo-btn {
-    font-size: 14px;
-    padding: 10px 14px;
-}
-
-/* ---------- MODAL UMUM ---------- */
-.modal-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.6);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 999;
-    padding: 20px;
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.2s;
-}
-
-.modal-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.modal-container {
-    background: var(--card);
-    border-radius: var(--radius);
-    max-width: 420px;
-    width: 100%;
-    max-height: 90vh;
-    overflow-y: auto;
-}
-
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 20px;
-    border-bottom: 1px solid var(--border);
-}
-
-.modal-header h3 {
-    font-size: 18px;
-}
-
-/* ---------- MODAL COSLO ---------- */
-.coslo-modal-box {
-    padding: 20px;
-}
-
-.coslo-body {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
-}
-
-.upload-group label {
-    display: block;
-    font-size: 14px;
-    font-weight: 500;
-    margin-bottom: 8px;
-}
-
-.file-input {
-    width: 100%;
-    padding: 10px;
-    background: var(--secondary);
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-}
-
-.file-hint {
-    font-size: 11px;
-    color: var(--text-secondary);
-    margin-top: 6px;
-}
-
-.coslo-preview-wrap {
-    border-radius: var(--radius-sm);
-    overflow: hidden;
-    background: var(--secondary);
-    max-height: 180px;
-}
-
-.preview-media {
-    width: 100%;
-    height: 180px;
-    object-fit: cover;
-}
-
-.coslo-controls {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-}
-
-.control-group label {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    margin-bottom: 6px;
-}
-
-.slider {
-    width: 100%;
-    height: 6px;
-    border-radius: 3px;
-    background: var(--secondary);
-    outline: none;
-    -webkit-appearance: none;
-}
-
-.slider::-webkit-slider-thumb {
-    -webkit-appearance: none;
-    width: 18px;
-    height: 18px;
-    border-radius: 50%;
-    background: var(--primary);
+    color: #666;
     cursor: pointer;
 }
 
-.coslo-buttons {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    margin-top: 8px;
+.nav-btn.active {
+    color: #2563eb;
+    border-bottom: 2px solid #2563eb;
 }
 
-.btn {
-    flex: 1;
-    min-width: 80px;
-    padding: 10px 14px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.2s;
-}
-
-.btn.primary {
-    background: var(--primary);
-    color: white;
-}
-
-.btn.secondary {
-    background: var(--secondary);
-    color: var(--text);
-}
-
-.btn.danger {
-    background: #fee2e2;
-    color: #b91c1c;
-}
-
-/* ---------- KONTEN UTAMA ---------- */
-.container {
-    max-width: 700px;
-    margin: 0 auto;
-    padding: 20px 16px;
-}
-
+/* HALAMAN */
 .page {
     display: none;
-    animation: fadeIn 0.3s ease;
+    padding: 16px;
 }
 
 .page.active {
     display: block;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(8px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
-.page-header {
-    margin-bottom: 24px;
-}
-
-.page-header h2 {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 6px;
-}
-
-.page-header p {
-    font-size: 14px;
-    color: var(--text-secondary);
-    line-height: 1.6;
-}
-
-/* ---------- STATISTIK ---------- */
-.stats-row {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.stat-card {
-    background: var(--secondary);
-    border-radius: var(--radius-sm);
-    padding: 12px;
-    text-align: center;
-}
-
-.stat-number {
+h2 {
     font-size: 20px;
-    font-weight: 700;
-    color: var(--primary);
-    line-height: 1.2;
+    margin-bottom: 16px;
 }
 
-.stat-label {
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.stat-since {
-    font-size: 11px;
-    color: var(--primary);
-}
-
-.gratis {
-    font-weight: 600;
-    color: var(--primary);
-}
-
-/* ---------- FILTER TAB ---------- */
-.filter-tabs {
+/* FILTER */
+.filter {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
     margin-bottom: 20px;
 }
 
-.filter-tab {
-    padding: 8px 14px;
+.filter-btn {
+    padding: 6px 14px;
+    border: 1px solid #ddd;
     border-radius: 20px;
-    background: var(--secondary);
-    color: var(--text);
+    background: white;
     font-size: 13px;
-    transition: 0.2s;
+    cursor: pointer;
 }
 
-.filter-tab.active {
-    background: var(--primary);
+.filter-btn.active {
+    background: #2563eb;
     color: white;
+    border-color: #2563eb;
 }
 
-/* ---------- GRID KARDUS SKIN & GAME ---------- */
-.cards-grid {
+/* GRID SKIN & GAME */
+.grid {
     display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
 }
 
-.cards-grid.two-col {
-    grid-template-columns: repeat(2, 1fr);
-}
-
 .card {
-    background: var(--card);
-    border-radius: var(--radius);
+    background: white;
+    border-radius: 10px;
     overflow: hidden;
-    border: 1px solid var(--border);
-    transition: transform 0.2s;
-}
-
-.card:active {
-    transform: scale(0.98);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .card-img {
     width: 100%;
-    aspect-ratio: 1 / 1;
+    aspect-ratio: 1/1;
     object-fit: cover;
-    background: var(--secondary);
+    background: #eee;
 }
 
 .card-body {
-    padding: 12px;
+    padding: 10px;
 }
 
 .card-title {
     font-size: 14px;
-    font-weight: 600;
-    margin-bottom: 10px;
-    line-height: 1.3;
+    margin-bottom: 8px;
 }
 
 .card-buttons {
     display: flex;
-    gap: 8px;
+    gap: 6px;
 }
 
-.card-btn {
+.btn {
     flex: 1;
-    padding: 8px;
-    border-radius: var(--radius-sm);
-    font-size: 13px;
-    font-weight: 500;
-    text-align: center;
-    transition: 0.2s;
+    padding: 6px;
+    border: none;
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
 }
 
-.card-btn.preview {
-    background: var(--secondary);
-    color: var(--text);
+.btn.preview {
+    background: #eee;
+    color: #333;
 }
 
-.card-btn.download {
-    background: var(--primary);
+.btn.download {
+    background: #2563eb;
     color: white;
 }
 
-/* ---------- DAFTAR ADDON — LANDSCAPE ---------- */
-.addon-list {
+/* LIST ADDON — LANDSCAPE */
+.list {
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 12px;
 }
 
 .addon-card {
     display: flex;
-    flex-direction: row;
-    background: var(--card);
-    border-radius: var(--radius);
+    background: white;
+    border-radius: 10px;
     overflow: hidden;
-    border: 1px solid var(--border);
-    transition: transform 0.2s;
-}
-
-.addon-card:active {
-    transform: scale(0.99);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
 }
 
 .addon-img {
-    width: 110px;
-    height: 110px;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
+    background: #eee;
     flex-shrink: 0;
-    background: var(--secondary);
 }
 
 .addon-body {
-    padding: 12px;
+    padding: 10px;
     flex: 1;
     display: flex;
     flex-direction: column;
@@ -587,348 +170,87 @@ a {
 }
 
 .addon-title {
-    font-size: 15px;
+    font-size: 14px;
     font-weight: 600;
-    margin-bottom: 6px;
+    margin-bottom: 4px;
 }
 
 .addon-desc {
     font-size: 12px;
-    color: var(--text-secondary);
-    margin-bottom: 10px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    color: #666;
+    margin-bottom: 8px;
 }
 
-.addon-buttons {
-    display: flex;
-    gap: 8px;
-}
-
-.addon-btn {
-    flex: 1;
-    padding: 7px 10px;
-    border-radius: var(--radius-sm);
-    font-size: 12px;
-    font-weight: 500;
-    text-align: center;
-    transition: 0.2s;
-}
-
-.addon-btn.preview {
-    background: var(--secondary);
-    color: var(--text);
-}
-
-.addon-btn.download {
-    background: var(--primary);
-    color: white;
-}
-
-/* ---------- HALAMAN PREVIEW ---------- */
-.preview-page {
+/* MODAL PREVIEW */
+.modal {
+    display: none;
     position: fixed;
-    inset: 0;
-    z-index: 500;
-    background: var(--bg);
-    display: flex;
-    flex-direction: column;
-    opacity: 0;
-    visibility: hidden;
-    transition: 0.2s;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
 }
 
-.preview-page.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.preview-top-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    padding: 12px 16px;
-    background: var(--card);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-}
-
-.back-btn {
-    background: var(--secondary);
-    color: var(--text);
-    padding: 8px 12px;
-    border-radius: var(--radius-sm);
-    font-size: 14px;
-    flex-shrink: 0;
-}
-
-.preview-top-bar h3 {
-    flex: 1;
-    font-size: 16px;
-    font-weight: 600;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.preview-actions {
-    display: flex;
-    gap: 6px;
-}
-
-.icon-action-btn {
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--secondary);
-    font-size: 16px;
+.modal.show {
     display: flex;
     align-items: center;
     justify-content: center;
-    color: var(--text);
-    transition: 0.2s;
+    padding: 20px;
 }
 
-.preview-content-area {
-    flex: 1;
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    max-width: 400px;
+    width: 100%;
+    max-height: 90vh;
     overflow-y: auto;
+    padding: 20px;
+    position: relative;
 }
 
-.preview-media-section img {
-    width: 100%;
-    height: auto;
-    display: block;
+.close {
+    position: absolute;
+    right: 16px;
+    top: 12px;
+    font-size: 24px;
+    cursor: pointer;
+    color: #666;
 }
 
-.game-preview-frame {
-    width: 100%;
-    height: calc(100vh - 100px);
-    border: none;
-    display: block;
-}
-
-.preview-text-info {
-    padding: 20px 16px 30px;
-}
-
-.preview-text-info h3 {
-    font-size: 20px;
-    margin-bottom: 10px;
-}
-
-.preview-desc-text {
-    font-size: 15px;
-    color: var(--text-secondary);
-    line-height: 1.7;
-}
-
-/* ---------- MODAL KECIL — COUPLE & JJ ---------- */
-.small-modal {
-    background: var(--card);
-    border-radius: var(--radius);
-    padding: 24px;
-    max-width: 320px;
-    width: 100%;
-    text-align: center;
-}
-
-.small-modal h3 {
-    font-size: 17px;
-    margin-bottom: 20px;
-}
-
-.couple-options, .jj-options {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+.modal-content h3 {
     margin-bottom: 16px;
+    padding-right: 30px;
 }
 
-.couple-option, .jj-option {
+.modal-content img {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 12px;
+}
+
+.modal-content p {
+    margin-bottom: 16px;
+    color: #555;
+}
+
+.download-btn {
+    display: block;
     width: 100%;
     padding: 12px;
-    border-radius: var(--radius-sm);
-    background: var(--secondary);
-    color: var(--text);
-    font-size: 14px;
-    font-weight: 500;
-    transition: 0.2s;
-}
-
-.couple-option:active, .jj-option:active {
-    background: var(--primary);
+    background: #2563eb;
     color: white;
-}
-
-.cancel-btn {
-    width: 100%;
-    padding: 10px;
-    border-radius: var(--radius-sm);
-    background: transparent;
-    color: var(--text-secondary);
-    font-size: 14px;
-}
-
-/* ---------- HALAMAN INFO — AKORDEON ---------- */
-.info-accordion {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.accordion-item {
-    background: var(--card);
-    border-radius: var(--radius-sm);
-    border: 1px solid var(--border);
-    overflow: hidden;
-}
-
-.accordion-header {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 14px 16px;
-    background: transparent;
-    color: var(--text);
-    font-size: 15px;
-    font-weight: 500;
-    text-align: left;
-}
-
-.accordion-icon {
-    transition: transform 0.25s ease;
-    font-size: 12px;
-    color: var(--text-secondary);
-}
-
-.accordion-item.open .accordion-icon {
-    transform: rotate(180deg);
-}
-
-.accordion-content {
-    max-height: 0;
-    overflow: hidden;
-    transition: max-height 0.3s ease;
-}
-
-.accordion-item.open .accordion-content {
-    max-height: 500px;
-}
-
-.accordion-inner {
-    padding: 0 16px 14px;
-}
-
-.info-item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    border-bottom: 1px solid var(--border);
-}
-
-.info-item:last-child {
-    border-bottom: none;
-}
-
-.info-name {
-    font-size: 14px;
-}
-
-.info-link {
-    font-size: 13px;
-    color: var(--primary);
-}
-
-/* ---------- NAVIGASI BAWAH ---------- */
-.bottom-nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: var(--card);
-    border-top: 1px solid var(--border);
-    display: flex;
-    justify-content:
-    justify-content: space-around;
-    padding: 8px 0;
-    z-index: 98;
-}
-
-.nav-item {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 2px;
-    background: transparent;
-    color: var(--text-secondary);
-    padding: 6px 16px;
-    transition: 0.2s;
-}
-
-.nav-item.active {
-    color: var(--primary);
-}
-
-.nav-icon {
-    font-size: 20px;
-    line-height: 1;
-}
-
-.nav-label {
-    font-size: 11px;
-}
-
-/* ---------- TOAST NOTIFIKASI ---------- */
-.toast {
-    position: fixed;
-    bottom: 100px;
-    left: 50%;
-    transform: translateX(-50%) translateY(20px);
-    background: rgba(0,0,0,0.75);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 20px;
-    font-size: 14px;
-    z-index: 9999;
-    opacity: 0;
-    transition: 0.3s;
-    pointer-events: none;
-}
-
-.toast.show {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
-}
-
-/* ---------- KOSONG ---------- */
-.empty-state {
     text-align: center;
-    padding: 40px 20px;
-    color: var(--text-secondary);
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
 }
 
-.empty-state p {
-    font-size: 14px;
-    margin-top: 8px;
-}
-
-/* ---------- RESPONSIVE ---------- */
-@media (max-width: 480px) {
-    .cards-grid.two-col {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 12px;
-    }
-    
-    .addon-img {
-        width: 90px;
-        height: 90px;
-    }
-    
-    .stats-row {
-        grid-template-columns: repeat(3, 1fr);
-    }
+/* KOSONG */
+.empty {
+    text-align: center;
+    padding: 40px;
+    color: #888;
 }

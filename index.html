@@ -4,262 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ArpiMC Zone</title>
-    <meta name="description" content="Koleksi skin, addon, dan game Minecraft gratis lengkap">
-    <meta name="theme-color" content="#2563eb">
-    <link rel="manifest" href="manifest.json">
-    
-    <!-- Open Graph untuk Share WhatsApp -->
-    <meta property="og:title" content="ArpiMC Zone">
-    <meta property="og:description" content="Koleksi skin, addon, dan game Minecraft gratis lengkap">
-    <meta property="og:image" content="https://files.catbox.moe/7vkqqk.jpg">
-    <meta property="og:type" content="website">
-    
-    <link rel="icon" type="image/png" href="https://files.catbox.moe/7vkqqk.jpg">
     <link rel="stylesheet" href="style.css">
 </head>
-<body data-theme="default">
-<!-- ===== HEADER ===== -->
-<header class="site-header">
-    <div class="header-inner">
-        <a href="#" class="logo" onclick="goHome()">
-            <img src="https://files.catbox.moe/7vkqqk.jpg" alt="ArpiMC Zone">
-            <span>ArpiMC Zone</span>
-        </a>
-        <button class="menu-toggle" id="menuToggle" aria-label="Menu">
-            <span></span>
-            <span></span>
-            <span></span>
-        </button>
-    </div>
+<body>
+<!-- HEADER -->
+<header class="header">
+    <h1>ArpiMC Zone</h1>
 </header>
-<!-- ===== SIDEBAR MENU ===== -->
-<div class="sidebar-overlay" id="sidebarOverlay"></div>
-<aside class="sidebar" id="sidebar">
-    <div class="sidebar-header">
-        <h3>Pengaturan</h3>
-        <button class="close-sidebar" id="closeSidebar">&times;</button>
-    </div>
-    
-    <div class="sidebar-section">
-        <h4>Pilih Tema</h4>
-        <div class="theme-options">
-            <button class="theme-btn" data-theme="default">Default</button>
-            <button class="theme-btn" data-theme="neobrutaslim">Neo Brutaslim</button>
-            <button class="theme-btn" data-theme="gelap">Gelap</button>
-            <button class="theme-btn" data-theme="pink">Pink</button>
-            <button class="theme-btn coslo-btn" data-theme="coslo" onclick="openCosloModal()">🖼️ Coslo</button>
-        </div>
-    </div>
-</aside>
 
-<!-- ===== MODAL COSLO ===== -->
-<div class="modal-overlay" id="cosloModal">
-    <div class="modal-container coslo-modal-box">
-        <div class="modal-header">
-            <h3>Pengaturan Coslo</h3>
-            <button class="close-sidebar" onclick="closeCosloModal()">&times;</button>
-        </div>
-        <div class="coslo-body">
-            <div class="upload-group">
-                <label>Pilih Gambar atau Video Latar</label>
-                <input type="file" id="cosloMediaFile" accept="image/*,video/*" class="file-input">
-                <p class="file-hint">Disimpan di perangkat saja, tidak diunggah ke server</p>
-            </div>
-            
-            <div class="coslo-preview-wrap" id="cosloPreviewWrap" style="display: none;">
-                <img id="cosloPreviewImg" class="preview-media" alt="Preview Gambar">
-                <video id="cosloPreviewVideo" class="preview-media" loop muted playsinline style="display: none;"></video>
-            </div>
-            
-            <div class="coslo-controls">
-                <div class="control-group">
-                    <label>Kontras: <span id="contrastVal">100</span>%</label>
-                    <input type="range" id="cosloContrast" min="50" max="150" value="100" class="slider">
-                </div>
-                <div class="control-group">
-                    <label>Keburaman: <span id="blurVal">0</span>px</label>
-                    <input type="range" id="cosloBlur" min="0" max="20" value="0" class="slider">
-                </div>
-                <div class="control-group">
-                    <label>Kecerahan: <span id="brightVal">100</span>%</label>
-                    <input type="range" id="cosloBright" min="50" max="150" value="100" class="slider">
-                </div>
-                <div class="control-group" id="videoVolGroup" style="display: none;">
-                    <label>Suara Video: <span id="volVal">0</span>%</label>
-                    <input type="range" id="cosloVolume" min="0" max="100" value="0" class="slider">
-                </div>
-            </div>
-            
-            <div class="coslo-buttons">
-                <button class="btn secondary" onclick="closeCosloModal()">Batal</button>
-                <button class="btn danger" onclick="resetCoslo()">Reset</button>
-                <button class="btn primary" onclick="saveCosloSetting()">Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
+<!-- NAVIGASI -->
+<nav class="nav">
+    <button class="nav-btn active" data-page="skin">Skin</button>
+    <button class="nav-btn" data-page="addon">Addon</button>
+    <button class="nav-btn" data-page="game">Game</button>
+    <button class="nav-btn" data-page="info">Info</button>
+</nav>
 
-<!-- ===== MAIN CONTENT ===== -->
-<main id="mainContent">
-    <!-- Halaman Skin -->
+<!-- KONTEN -->
+<main>
+    <!-- HALAMAN SKIN -->
     <section id="skinPage" class="page active">
-        <div class="container">
-            <div class="page-header">
-                <h2>Koleksi Skin</h2>
-                <p>Temukan skin favoritmu, langsung unduh tanpa ribet. Semua yang ada di sini gratis, tanpa biaya apapun.</p>
-            </div>
-            <div class="stats-row">
-                <div class="stat-card">
-                    <div class="stat-number" id="skinCount">0</div>
-                    <div class="stat-label">Skin</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Kategori</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-label gratis">Gratis</div>
-                    <div class="stat-since">Selamanya</div>
-                </div>
-            </div>
-            <div class="filter-tabs" id="skinFilters">
-                <button class="filter-tab active" data-filter="semua">Semua</button>
-                <button class="filter-tab" data-filter="cowok">Cowok</button>
-                <button class="filter-tab" data-filter="cewek">Cewek</button>
-                <button class="filter-tab" data-filter="pvp">PVP</button>
-                <button class="filter-tab" data-filter="pack">Skin Pack</button>
-                <button class="filter-tab" data-filter="emote">Emote</button>
-                <button class="filter-tab" data-filter="jj">Skin JJ</button>
-                <button class="filter-tab" data-filter="couple">Skin Couple</button>
-            </div>
-            <div class="cards-grid two-col" id="skinGrid">
-                <!-- Skin dimuat dari JS -->
-            </div>
+        <h2>Koleksi Skin</h2>
+        <div class="filter">
+            <button class="filter-btn active" data-filter="semua">Semua</button>
+            <button class="filter-btn" data-filter="cowok">Cowok</button>
+            <button class="filter-btn" data-filter="cewek">Cewek</button>
         </div>
+        <div class="grid" id="skinGrid">Memuat data...</div>
     </section>
-    <!-- Halaman Addon -->
+
+    <!-- HALAMAN ADDON -->
     <section id="addonPage" class="page">
-        <div class="container">
-            <div class="page-header">
-                <h2>Koleksi Addon</h2>
-                <p>Kumpulan addon, resource pack, shader, dan UI untuk Minecraft Bedrock Edition.</p>
-            </div>
-            <div class="filter-tabs" id="addonFilters">
-                <button class="filter-tab active" data-filter="semua">Semua</button>
-                <button class="filter-tab" data-filter="addon">Addon</button>
-                <button class="filter-tab" data-filter="pack">Pack</button>
-                <button class="filter-tab" data-filter="shader">Shader</button>
-                <button class="filter-tab" data-filter="ui">UI</button>
-                <button class="filter-tab" data-filter="maps">Maps</button>
-                <button class="filter-tab" data-filter="horor">Horor</button>
-                <button class="filter-tab" data-filter="survival">Survival</button>
-                <button class="filter-tab" data-filter="lain">Lain-lain</button>
-            </div>
-            <div class="addon-list" id="addonGrid">
-                <!-- Addon dimuat dari JS -->
-            </div>
+        <h2>Koleksi Addon</h2>
+        <div class="filter">
+            <button class="filter-btn active" data-filter="semua">Semua</button>
+            <button class="filter-btn" data-filter="addon">Addon</button>
+            <button class="filter-btn" data-filter="maps">Maps</button>
         </div>
+        <div class="list" id="addonGrid">Memuat data...</div>
     </section>
-    <!-- Halaman Game -->
+
+    <!-- HALAMAN GAME -->
     <section id="gamePage" class="page">
-        <div class="container">
-            <div class="page-header">
-                <h2>Mini Game & Alat</h2>
-                <p>Mainkan game seru dan gunakan alat bantu sederhana langsung di sini.</p>
-            </div>
-            <div class="filter-tabs" id="gameFilters">
-                <button class="filter-tab active" data-filter="semua">Semua</button>
-                <button class="filter-tab" data-filter="game">Game</button>
-                <button class="filter-tab" data-filter="tools">Alat</button>
-            </div>
-            <div class="cards-grid two-col" id="gameGrid">
-                <!-- Game dimuat dari JS -->
-            </div>
-        </div>
+        <h2>Mini Game</h2>
+        <div class="grid" id="gameGrid">Memuat data...</div>
     </section>
-    <!-- Halaman Info -->
+
+    <!-- HALAMAN INFO -->
     <section id="infoPage" class="page">
-        <div class="container">
-            <div class="page-header">
-                <h2>Tentang ArpiMC Zone</h2>
-                <p id="infoDesc">Memuat informasi...</p>
-            </div>
-            <div class="info-accordion" id="infoContent">
-                <!-- Konten dimuat dari data.json -->
-            </div>
-        </div>
+        <h2>Info</h2>
+        <div id="infoContent">Memuat data...</div>
     </section>
 </main>
 
-<!-- ===== PREVIEW HALAMAN ===== -->
-<div class="preview-page" id="previewPage">
-    <div class="preview-top-bar">
-        <button class="back-btn" onclick="closePreviewPage()">← Kembali</button>
-        <h3 id="previewPageTitle">Preview</h3>
-        <div class="preview-actions">
-            <button class="icon-action-btn" id="copyLinkBtn" title="Salin Link">🔗</button>
-            <button class="icon-action-btn" id="shareWABtn" title="Bagikan WA">💬</button>
-            <a class="icon-action-btn" id="previewDownloadBtn" href="#" target="_blank" title="Unduh" style="display:none;">⬇️</a>
-        </div>
-    </div>
-    <div class="preview-content-area">
-        <div id="previewMediaSection" class="preview-media-section">
-            <img id="previewImage" src="" alt="Preview">
-        </div>
-        <iframe id="previewGameFrame" class="game-preview-frame" frameborder="0" allowfullscreen></iframe>
-        <div class="preview-text-info">
-            <h3 id="previewName"></h3>
-            <p id="previewDescription" class="preview-desc-text"></p>
-        </div>
+<!-- MODAL PREVIEW -->
+<div id="previewModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h3 id="modalTitle">Preview</h3>
+        <img id="modalImg" src="" alt="">
+        <p id="modalDesc"></p>
+        <a id="modalDownload" href="" target="_blank" class="download-btn">Unduh</a>
     </div>
 </div>
 
-<!-- Modal Pilihan Download Couple -->
-<div class="modal-overlay" id="coupleModal">
-    <div class="small-modal">
-        <h3>Pilih yang mau diunduh</h3>
-        <div class="couple-options">
-            <button class="couple-option" id="dlCowok">👦 Cowok</button>
-            <button class="couple-option" id="dlCewek">👧 Cewek</button>
-        </div>
-        <button class="cancel-btn" onclick="closeCoupleModal()">Batal</button>
-    </div>
-</div>
-<!-- Modal Pilihan Download Skin JJ -->
-<div class="modal-overlay" id="jjModal">
-    <div class="small-modal">
-        <h3>Pilihan Unduhan</h3>
-        <div class="jj-options">
-            <button class="jj-option" id="dlJJSkin">📥 Download Skin</button>
-            <button class="jj-option" id="dlJJImg">🖼️ Download Gambar</button>
-            <button class="jj-option" id="dlJJAll">📦 Download Semua (.zip)</button>
-        </div>
-        <button class="cancel-btn" onclick="closeJJModal()">Batal</button>
-    </div>
-</div>
-
-<!-- ===== BOTTOM NAV ===== -->
-<nav class="bottom-nav">
-    <button class="nav-item active" data-page="skinPage">
-        <span class="nav-icon">🎨</span>
-        <span class="nav-label">Skin</span>
-    </button>
-    <button class="nav-item" data-page="addonPage">
-        <span class="nav-icon">📦</span>
-        <span class="nav-label">Addon</span>
-    </button>
-    <button class="nav-item" data-page="gamePage">
-        <span class="nav-icon">🎮</span>
-        <span class="nav-label">Game</span>
-    </button>
-    <button class="nav-item" data-page="infoPage">
-        <span class="nav-icon">ℹ️</span>
-        <span class="nav-label">Info</span>
-    </button>
-</nav>
-
-<!-- ===== TOAST NOTIFIKASI ===== -->
-<div class="toast" id="toast"></div>
 <script src="script.js"></script>
 </body>
 </html>

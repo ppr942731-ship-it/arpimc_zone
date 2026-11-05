@@ -1,3 +1,69 @@
+// === ROUTING ===
+function handleRoute() {
+  const path = window.location.pathname;
+  
+  // Halaman Utama / Skin
+  if (path === '/' || path === '/index.html') {
+    showPage('skins');
+    return;
+  }
+  
+  // Halaman Skin
+  if (path.startsWith('/skin')) {
+    showPage('skins');
+    if (path === '/skin-cowok') setSkinFilter('cowok');
+    else if (path === '/skin-cewek') setSkinFilter('cewek');
+    else if (path === '/skin-pvp') setSkinFilter('pvp');
+    else if (path === '/skin-template') setSkinFilter('template');
+    else if (path === '/skin-pack') setSkinFilter('pack');
+    return;
+  }
+  
+  // Halaman Addon
+  if (path.startsWith('/addon')) {
+    showPage('addons');
+    if (path === '/addon') setAddonFilter('all');
+    else if (path === '/addon-item') setAddonFilter('addon');
+    else if (path === '/addon-pack') setAddonFilter('pack');
+    else if (path === '/addon-shader') setAddonFilter('shader');
+    else if (path === '/addon-ui') setAddonFilter('ui');
+    else if (path === '/addon-lain') setAddonFilter('lain');
+    return;
+  }
+  
+  // Halaman Game
+  if (path === '/game' || path.startsWith('/game-')) {
+    showPage('games');
+    return;
+  }
+}
+
+function showPage(pageName) {
+  document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+  document.querySelector(`.nav-item[data-page="${pageName}"]`)?.classList.add('active');
+  
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(`${pageName}Page`).classList.add('active');
+}
+
+function setSkinFilter(cat) {
+  document.querySelectorAll('#skinFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`#skinFilters .filter-btn[data-cat="${cat}"]`)?.classList.add('active');
+  currentSkinFilter = cat;
+  renderSkins();
+}
+
+function setAddonFilter(cat) {
+  document.querySelectorAll('#addonFilters .filter-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`#addonFilters .filter-btn[data-cat="${cat}"]`)?.classList.add('active');
+  currentAddonFilter = cat;
+  renderAddons();
+}
+
+// Jalankan saat halaman dimuat
+document.addEventListener('DOMContentLoaded', handleRoute);
+window.addEventListener('popstate', handleRoute);
+
 // === DATA ===
 let skins = [];
 let addons = [];

@@ -99,15 +99,17 @@ function renderSkins() {
     : skins.filter(s => s.kategori === currentSkinFilter);
   
   grid.innerHTML = filtered.map(item => `
-    <div class="skin-card">
-      <img src="${item.gambar}" alt="${item.tag}" class="skin-image" loading="lazy">
-      <h3 class="skin-title">${item.tag}</h3>
-      <div class="skin-buttons">
-        <button class="btn btn-secondary" data-preview="${item.gambar}" data-title="${item.tag}">Preview</button>
-        <a href="${item.link_download}" target="_blank" class="btn btn-primary">Unduh</a>
-      </div>
+  <div class="skin-card">
+    <img src="${item.gambar}" alt="${item.tag}" class="skin-image" loading="lazy">
+    <h3 class="skin-title">${item.tag}</h3>
+    <div class="skin-buttons">
+      <button class="btn btn-secondary" data-preview="${item.gambar}" data-title="${item.tag}">Preview</button>
+      <a href="${item.link_download}" target="_blank" class="btn btn-primary">Unduh</a>
+      <button class="btn btn-secondary" onclick="shareToWhatsApp('${item.tag}', window.location.href)">📤</button>
     </div>
-  `).join('');
+  </div>
+`).join('');
+
   
   attachPreviewEvents();
 }
@@ -120,19 +122,20 @@ function renderAddons() {
     : addons.filter(a => a.kategori === currentAddonFilter);
   
   grid.innerHTML = filtered.map(item => `
-    <div class="addon-card">
-      <div class="addon-image-wrapper">
-        ${item.gambar 
-          ? `<img src="${item.gambar}" alt="${item.nama}" class="addon-image" loading="lazy">`
-          : `<span style="font-size:2rem;color:var(--text-alt)">📦</span>`
-        }
-      </div>
-      <h3 class="addon-title">${item.nama}</h3>
-      ${item.deskripsi ? `<p class="addon-desc">${item.deskripsi}</p>` : ''}
-      ${item.versi_mc ? `<div class="addon-meta"><span class="meta-tag">MC: ${item.versi_mc}</span></div>` : ''}
-      <a href="${item.link_download || '#'}" target="_blank" class="btn btn-primary" style="width:100%">Unduh</a>
+  <div class="addon-card">
+    <div class="addon-image-wrapper">
+      ${item.gambar 
+        ? `<img src="${item.gambar}" alt="${item.nama}" class="addon-image" loading="lazy">`
+        : `<span style="font-size:2rem;color:var(--text-alt)">📦</span>`
+      }
     </div>
-  `).join('');
+    <h3 class="addon-title">${item.nama}</h3>
+    ${item.deskripsi ? `<p class="addon-desc">${item.deskripsi}</p>` : ''}
+    ${item.versi_mc ? `<div class="addon-meta"><span class="meta-tag">MC: ${item.versi_mc}</span></div>` : ''}
+    <a href="${item.link_download || '#'}" target="_blank" class="btn btn-primary" style="width:100%;margin-bottom:8px">Unduh</a>
+    <button class="btn btn-secondary" style="width:100%" onclick="shareToWhatsApp('${item.nama}', window.location.href)">📤 Bagikan ke WhatsApp</button>
+  </div>
+`).join('');
 }
 
 // === RENDER GAME — DENGAN IFRAME PREVIEW ===
@@ -244,4 +247,9 @@ document.querySelectorAll('.theme-option').forEach(btn => {
 const savedTheme = localStorage.getItem('theme');
 if (savedTheme) {
   document.documentElement.setAttribute('data-theme', savedTheme);
+
+// === BAGIKAN KE WHATSAPP ===
+function shareToWhatsApp(judul, link) {
+  const pesan = encodeURIComponent(`Hai! Lihat nih ${judul} di ArpiMC Zone 😍\n${link}`);
+  window.open(`https://wa.me/?text=${pesan}`, '_blank');
 }

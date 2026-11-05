@@ -1,20 +1,16 @@
 /* =============================================
    === ARPIMC ZONE — SCRIPT.JS ===
-   === Garis Pembatas Bagian Mudah Diedit ===
+   === ID-based Link + Fullscreen Modal + Share Preview ===
    ============================================= */
 
-// =============================================
-// === BAGIAN: VARIABEL & DATA GLOBAL ===
-// =============================================
 let allSkins = [];
 let allAddons = [];
 let allGames = [];
 let currentFilter = 'all';
 let currentAddonFilter = 'all';
-let currentGameSubPage = 'games';
 
 // =============================================
-// === BAGIAN: MUAT DATA DARI FILE JSON ===
+// === MUAT DATA DARI JSON ===
 // =============================================
 async function loadAllData() {
   try {
@@ -34,43 +30,72 @@ async function loadAllData() {
     renderAddons();
     renderGames();
     
-    checkSlugFromURL();
+    checkIdFromURL();
   } catch (err) {
     console.error('Gagal memuat data:', err);
   }
 }
 
 // =============================================
-// === BAGIAN: BACA SLUG DARI LINK & BUKA DETAIL ===
+// === BACA ID DARI LINK & BUKA MODAL OTOMATIS ===
 // =============================================
-function checkSlugFromURL() {
+function checkIdFromURL() {
   const params = new URLSearchParams(window.location.search);
-  const slug = params.get('slug');
+  const skinId = params.get('id');
   
-  if (slug) {
-    const skin = allSkins.find(s => s.slug === slug);
+  if (skinId !== null) {
+    const id = parseInt(skinId);
+    const skin = allSkins.find(s => s.id === id);
     if (skin) {
-      bukaModalDetailSkin(skin);
-      updateOGImage(skin.gambar);
+      bukaModalSkinFull(skin);
+      updateMetaShare(skin);
     }
   }
 }
 
 // =============================================
-// === BAGIAN: UPDATE GAMBAR PRATINJAU SOSMED/WA ===
+// === UPDATE META UNTUK PREVIEW SHARE ===
 // =============================================
-function updateOGImage(imageUrl) {
+function updateMetaShare(skin) {
+  const baseUrl = window.location.origin + window.location.pathname;
+  const shareUrl = `${baseUrl}?id=${skin.id}`;
+  
+  let ogTitle = document.querySelector('meta[property="og:title"]');
+  let ogDesc = document.querySelector('meta[property="og:description"]');
   let ogImage = document.querySelector('meta[property="og:image"]');
+  let ogUrl = document.querySelector('meta[property="og:url"]');
+  
+  if (!ogTitle) {
+    ogTitle = document.createElement('meta');
+    ogTitle.setAttribute('property', 'og:title');
+    document.head.appendChild(ogTitle);
+  }
+  if (!ogDesc) {
+    ogDesc = document.createElement('meta');
+    ogDesc.setAttribute('property', 'og:description');
+    document.head.appendChild(ogDesc);
+  }
   if (!ogImage) {
     ogImage = document.createElement('meta');
     ogImage.setAttribute('property', 'og:image');
     document.head.appendChild(ogImage);
   }
-  ogImage.setAttribute('content', imageUrl);
+  if (!ogUrl) {
+    ogUrl = document.createElement('meta');
+    ogUrl.setAttribute('property', 'og:url');
+    document.head.appendChild(ogUrl);
+  }
+  
+  ogTitle.setAttribute('content', skin.tag);
+  ogDesc.setAttribute('content', skin.deskripsi || 'Unduh gratis di ArpiMC Zone');
+  ogImage.setAttribute('content', skin.gambar);
+  ogUrl.setAttribute('content', shareUrl);
+  
+  document.title = `${skin.tag} | ArpiMC Zone`;
 }
 
 // =============================================
-// === BAGIAN: RENDER KARTU SKIN ===
+// === RENDER KARTU SKIN — TIDAK ADA UNDEFINED ===
 // =============================================
 function renderSkins() {
   const container = document.getElementById('skinContent');
@@ -86,15 +111,15 @@ function renderSkins() {
   }
 
   container.innerHTML = filtered.map(skin => `
-    <div class="skin-card" data-slug="${skin.slug}" onclick="bukaModalDetailSkin(${JSON.stringify(skin).replace(/"/g, '&quot;')})">
-      <div class="card-image-wrapper">
+    <div class="skin-card">
+      <div class="card-image-wrapper" onclick='bukaModalSkinFull(${JSON.stringify(skin).replace(/'/g, "\\'").replace(/"/g, '&quot;')})'>
         <img src="${skin.gambar}" alt="${skin.tag}" loading="lazy">
       </div>
       <div class="card-body">
         <h3 class="card-title">${skin.tag}</h3>
         <div class="card-buttons">
-          <button class="card-btn preview" onclick="event.stopPropagation(); bukaModalDetailSkin(${JSON.stringify(skin).replace(/"/g, '&quot;')})">Preview</button>
-          <a href="${skin.link_download}" target="_blank" class="card-btn download" onclick="event.stopPropagation();">Unduh</a>
+          <button class="card-btn preview" onclick='bukaModalSkinFull(${JSON.stringify(skin).replace(/'/g, "\\'").replace(/"/g, '&quot;')})'>Preview</button>
+          <a href="${skin.link_download}" target="_blank" class="card-btn download">Unduh</a>
         </div>
       </div>
     </div>
@@ -102,61 +127,71 @@ function renderSkins() {
 }
 
 // =============================================
-// === BAGIAN: MODAL DETAIL SKIN ===
+// === MODAL PREVIEW SKIN — LAYAR PENUH SEPERTI GAME ===
 // =============================================
-function bukaModalDetailSkin(skin) {
-  const modal = document.getElementById('skinDetailModal');
-  const body = document.getElementById('skinDetailBody');
+function bukaModalSkinFull(skin) {
+  const modal = document.getElementById('skinFullModal');
+  const body = document.getElementById('skinFullBody');
+  const baseUrl = window.location.origin + window.location.pathname;
+  const shareUrl = `${baseUrl}?id=${skin.id}`;
+  
+  history.replaceState(null, '', shareUrl);
+  updateMetaShare(skin);
   
   body.innerHTML = `
-    <img src="${skin.gambar}" alt="${skin.tag}" class="modal-skin-img">
-    <h2 class="modal-skin-name">${skin.tag}</h2>
-    <div class="modal-skin-meta">
-      ${skin.deskripsi || 'Credit: Pemilik asli'}<br>
-      📅 ${skin.tanggal_upload || 'Tanpa tanggal'}
-      ${skin.slug ? `<br>🔗 ID: ${skin.slug}` : ''}
-    </div>
-    <div class="modal-actions">
-      <a href="${skin.link_download}" target="_blank" class="modal-btn download">⬇️ Unduh Skin</a>
-      <button class="modal-btn share" onclick="bagikanSkin('${skin.slug || ''}', '${skin.tag}')">🔗 Bagikan Link</button>
-    </div>
+    <img src="${skin.gambar}" alt="${skin.tag}" style="width:100%;height:100%;object-fit:contain;">
   `;
   
+  document.getElementById('skinFullName').textContent = skin.tag;
+  document.getElementById('skinFullDesc').innerHTML = `
+    ${skin.deskripsi || 'Credit: Pemilik asli'}<br>
+    📅 ${skin.tanggal_upload || 'Tanggal tidak diketahui'}
+  `;
+  document.getElementById('skinFullDownload').href = skin.link_download;
+  document.getElementById('skinFullShare').onclick = () => bagikanLink(skin.id, skin.tag);
+  
   modal.classList.remove('hidden');
-  updateOGImage(skin.gambar);
+  document.body.style.overflow = 'hidden';
 }
 
-function tutupModalSkin() {
-  document.getElementById('skinDetailModal').classList.add('hidden');
+function tutupModalSkinFull() {
+  document.getElementById('skinFullModal').classList.add('hidden');
+  document.body.style.overflow = '';
+  history.pushState(null, '', window.location.pathname);
 }
 
 // =============================================
-// === BAGIAN: BAGIKAN LINK SKIN KE SOSMED/WA ===
+// === BAGIKAN LINK KE WHATSAPP / SALIN ===
 // =============================================
-async function bagikanSkin(slug, nama) {
+async function bagikanLink(id, tag) {
   const baseUrl = window.location.origin + window.location.pathname;
-  const shareUrl = slug ? `${baseUrl}?slug=${slug}` : baseUrl;
-  const text = `${nama}\n👉 ${shareUrl}`;
+  const shareUrl = `${baseUrl}?id=${id}`;
+  
+  const teks = `✨ ${tag}
+
+👉 Unduh di sini: ${shareUrl}
+
+📦 Dari ArpiMC Zone — Koleksi Skin & Addon Minecraft Gratis`;
 
   try {
     if (navigator.share) {
       await navigator.share({
-        title: nama,
-        text: text,
+        title: tag,
+        text: teks,
         url: shareUrl
       });
     } else {
-      await navigator.clipboard.writeText(text);
-      alert('✅ Link disalin!\n\n' + text);
+      await navigator.clipboard.writeText(teks);
+      alert('✅ Link disalin!\n\n' + teks);
     }
   } catch (err) {
-    await navigator.clipboard.writeText(text).catch(() => {});
+    await navigator.clipboard.writeText(teks).catch(() => {});
     alert('✅ Link disalin ke papan klip!');
   }
 }
 
 // =============================================
-// === BAGIAN: RENDER KARTU ADDON ===
+// === RENDER ADDON ===
 // =============================================
 function renderAddons() {
   const container = document.getElementById('addonContent');
@@ -187,7 +222,7 @@ function renderAddons() {
 }
 
 // =============================================
-// === BAGIAN: RENDER KARTU GAME ===
+// === RENDER GAME ===
 // =============================================
 function renderGames() {
   const container = document.getElementById('gameContent');
@@ -211,7 +246,7 @@ function renderGames() {
 }
 
 // =============================================
-// === BAGIAN: MODAL GAME FULL SCREEN ===
+// === MODAL GAME FULL SCREEN ===
 // =============================================
 function bukaGameFull(link, nama) {
   const modal = document.getElementById('gameFullModal');
@@ -221,6 +256,7 @@ function bukaGameFull(link, nama) {
   iframe.src = link;
   tabBtn.href = link;
   modal.classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
 }
 
 function tutupGameFull() {
@@ -228,13 +264,14 @@ function tutupGameFull() {
   const iframe = document.getElementById('gameIframeFull');
   modal.classList.add('hidden');
   iframe.src = '';
+  document.body.style.overflow = '';
 }
 
 // =============================================
-// === BAGIAN: NAVIGASI HALAMAN ===
+// === NAVIGASI BAWAH ===
 // =============================================
 function setupNavigation() {
-  const navTabs = document.querySelectorAll('.nav-tab');
+  const navTabs = document.querySelectorAll('.bottom-nav-item');
   const pages = document.querySelectorAll('.page-section');
 
   navTabs.forEach(tab => {
@@ -250,12 +287,15 @@ function setupNavigation() {
           page.classList.add('active');
         }
       });
+      
+      tutupModalSkinFull();
+      tutupGameFull();
     });
   });
 }
 
 // =============================================
-// === BAGIAN: FILTER KATEGORI SKIN ===
+// === FILTER KATEGORI ===
 // =============================================
 function setupSkinFilter() {
   const filterTabs = document.querySelectorAll('#page-skin .filter-tab');
@@ -270,9 +310,6 @@ function setupSkinFilter() {
   });
 }
 
-// =============================================
-// === BAGIAN: FILTER KATEGORI ADDON ===
-// =============================================
 function setupAddonFilter() {
   const filterTabs = document.querySelectorAll('#page-addon .filter-tab');
   
@@ -287,23 +324,7 @@ function setupAddonFilter() {
 }
 
 // =============================================
-// === BAGIAN: SUB-TAB GAME ===
-// =============================================
-function setupGameSubTabs() {
-  const subTabs = document.querySelectorAll('#gameSubTabs .filter-tab');
-  
-  subTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      subTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentGameSubPage = tab.getAttribute('data-subpage');
-      renderGames();
-    });
-  });
-}
-
-// =============================================
-// === BAGIAN: SISTEM TEMA ===
+// === TEMA ===
 // =============================================
 function setupThemes() {
   const savedTheme = localStorage.getItem('arpimc-theme') || 'default';
@@ -333,48 +354,27 @@ function setupThemes() {
 }
 
 // =============================================
-// === BAGIAN: INISIALISASI PWA / INSTAL APLIKASI ===
+// === PWA ===
 // =============================================
 let deferredPrompt;
-
 function setupPWA() {
   window.addEventListener('beforeinstallprompt', (e) => {
     e.preventDefault();
     deferredPrompt = e;
-    console.log('✅ Aplikasi siap untuk dipasang');
   });
-
   window.addEventListener('appinstalled', () => {
     deferredPrompt = null;
-    console.log('✅ Aplikasi berhasil dipasang');
   });
 }
 
 // =============================================
-// === BAGIAN: KLIK DI LUAR MODAL ===
-// =============================================
-function setupModalClose() {
-  const skinModal = document.getElementById('skinDetailModal');
-  
-  document.getElementById('closeSkinModal').addEventListener('click', tutupModalSkin);
-  
-  skinModal.addEventListener('click', (e) => {
-    if (e.target === skinModal) tutupModalSkin();
-  });
-  
-  document.getElementById('gameCloseBtn').addEventListener('click', tutupGameFull);
-}
-
-// =============================================
-// === BAGIAN: MULAI SEMUA SAAT HALAMAN DIBUKA ===
+// === INISIALISASI ===
 // =============================================
 document.addEventListener('DOMContentLoaded', () => {
   setupNavigation();
   setupSkinFilter();
   setupAddonFilter();
-  setupGameSubTabs();
   setupThemes();
-  setupModalClose();
   setupPWA();
   loadAllData();
 });

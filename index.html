@@ -1,252 +1,197 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ArpiMC Zone</title>
-  <meta name="description" content="Koleksi skin, addon, dan permainan Minecraft — gratis dan mudah diunduh">
-  
-  <!-- Web App Manifest -->
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#0066FF">
-  
-  <!-- Font & Icons -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-  
-  <!-- Styles -->
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- === META UTAMA === -->
+    <title>ArpiMC Zone — Kumpulan Skin & Addon Minecraft Gratis</title>
+    <meta name="description" content="Tempat terbaik download skin dan addon Minecraft gratis! Langsung unduh tanpa ribet.">
+    <meta name="author" content="ArpiMC Zone">
+    
+    <!-- === META PRATINJAU WHATSAPP / SOSMED === -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="ArpiMC Zone">
+    <meta property="og:description" content="Kumpulan Skin & Addon Minecraft Gratis — arpimc.zone.id">
+    <meta property="og:image" content="https://files.catbox.moe/7vkqqk.jpg">
+    <meta property="og:url" content="https://arpimc.zone.id/">
+    <meta name="twitter:card" content="summary_large_image">
+    
+    <!-- === ICON & MANIFEST (untuk Pintasan + Instal Aplikasi) === -->
+    <link rel="icon" href="https://files.catbox.moe/7vkqqk.jpg">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#2563eb">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="ArpiMC Zone">
+    <link rel="apple-touch-icon" href="https://files.catbox.moe/7vkqqk.jpg">
+    
+    <!-- === LINK CSS === -->
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Header -->
-  <header class="site-header">
+<!-- ======================================
+    === HEADER & LOGO ===
+====================================== -->
+<header class="site-header">
     <div class="header-inner">
-      <img src="https://files.catbox.moe/7vkqqk.jpg" alt="Logo" class="site-logo">
-      <h1 class="site-title">ArpiMC Zone</h1>
-      <button class="theme-toggle-btn" aria-label="Menu Tema">☰</button>
+        <img src="https://files.catbox.moe/7vkqqk.jpg" alt="Logo ArpiMC Zone" class="site-logo">
+        <h1 class="site-title">ArpiMC Zone</h1>
+        <button id="themeToggle" class="theme-btn" aria-label="Pilih Tema">☰</button>
     </div>
-  </header>
+    <hr class="divider">
+</header>
 
-  <!-- Sidebar Tema -->
-  <aside class="theme-sidebar" id="themeSidebar">
-    <div class="sidebar-overlay" id="themeOverlay"></div>
-    <div class="sidebar-content">
-      <div class="sidebar-header">
-        <h2>Pilih Tema</h2>
-        <button class="close-sidebar" id="closeThemeSidebar">&times;</button>
-      </div>
-      <div class="theme-options">
+<!-- ======================================
+    === NAVIGASI UTAMA ===
+====================================== -->
+<nav class="main-nav">
+    <button class="nav-tab active" data-page="skin">Skin</button>
+    <button class="nav-tab" data-page="addon">Addon</button>
+    <button class="nav-tab" data-page="game">Game</button>
+    <button class="nav-tab" data-page="info">Info</button>
+</nav>
+
+<!-- ======================================
+    === KONTEN UTAMA ===
+====================================== -->
+<main id="mainContent">
+    <!-- === HALAMAN SKIN === -->
+    <section id="page-skin" class="page-section active">
+        <div class="page-intro">
+            <h2>Koleksi Skin</h2>
+            <p>Temukan skin favoritmu, langsung unduh tanpa ribet. Semua yang ada di sini gratis, tanpa biaya apapun.</p>
+            <div class="stats-row">
+                <div class="stat-item"><span id="totalSkin">0</span><small>Skin</small></div>
+                <div class="stat-item"><span id="totalSkinCategory">5</span><small>Kategori</small></div>
+                <div class="stat-item"><span>Gratis</span><small>Selamanya</small></div>
+            </div>
+        </div>
+
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">Semua</button>
+            <button class="filter-tab" data-filter="cowok">Cowok</button>
+            <button class="filter-tab" data-filter="cewek">Cewek</button>
+            <button class="filter-tab" data-filter="pvp">PVP</button>
+            <button class="filter-tab" data-filter="template">Template Skin</button>
+            <button class="filter-tab" data-filter="skinpack">Skin Pack</button>
+        </div>
+
+        <div id="skinContent" class="cards-grid">
+            <p class="loading-text">Memuat skin...</p>
+        </div>
+    </section>
+
+    <!-- === HALAMAN ADDON === -->
+    <section id="page-addon" class="page-section">
+        <div class="page-intro">
+            <h2>Koleksi Addon</h2>
+            <p>Kumpulan addon, resource pack, shader, dan antarmuka Minecraft keren — gratis untuk kamu pakai!</p>
+        </div>
+
+        <div class="filter-tabs">
+            <button class="filter-tab active" data-filter="all">Semua</button>
+            <button class="filter-tab" data-filter="addon">Addon</button>
+            <button class="filter-tab" data-filter="pack">Pack</button>
+            <button class="filter-tab" data-filter="shader">Shader</button>
+            <button class="filter-tab" data-filter="ui">UI</button>
+            <button class="filter-tab" data-filter="lain">Lain-lain</button>
+        </div>
+
+        <div id="addonContent" class="cards-grid">
+            <p class="loading-text">Memuat addon...</p>
+        </div>
+    </section>
+
+    <!-- === HALAMAN GAME === -->
+    <section id="page-game" class="page-section">
+        <div class="page-intro">
+            <h2>Mini Game & Tools</h2>
+            <p>Beristirahat sejenak dan mainkan permainan sederhana. Semua bisa dimainkan langsung tanpa instalasi.</p>
+        </div>
+
+        <div id="gameSubTabs" class="filter-tabs">
+            <button class="filter-tab active" data-subpage="games">🎮 Game</button>
+            <button class="filter-tab" data-subpage="tools">🛠️ Tools</button>
+        </div>
+
+        <div id="gameContent" class="cards-grid">
+            <p class="loading-text">Memuat game...</p>
+        </div>
+    </section>
+
+    <!-- === HALAMAN INFO === -->
+    <section id="page-info" class="page-section">
+        <div class="page-intro">
+            <h2>Tentang ArpiMC Zone</h2>
+            <p>Satu tempat untuk segala kebutuhan Minecraft kamu. Karya gratis, selalu ada untuk komunitas!</p>
+            
+            <div class="info-links">
+                <a href="#" class="info-link-item">📢 Saluran</a>
+                <a href="#" class="info-link-item">💬 Sosmed</a>
+                <a href="#" class="info-link-item">👥 Grup</a>
+            </div>
+
+            <div class="support-box">
+                <h3>Dukung Kami</h3>
+                <p>Karya gratis tetap ada dengan dukunganmu!</p>
+                <button class="btn btn-primary">💜 Dukung Sekarang</button>
+            </div>
+        </div>
+    </section>
+</main>
+
+<!-- ======================================
+    === MODAL DETAIL SKIN ===
+====================================== -->
+<div id="skinDetailModal" class="modal-overlay hidden">
+    <div class="modal-container">
+        <button class="modal-close" id="closeSkinModal">✕</button>
+        <div class="modal-content" id="skinDetailBody">
+            <!-- Isi otomatis dari JS -->
+        </div>
+    </div>
+</div>
+
+<!-- ======================================
+    === MODAL GAME FULL SCREEN ===
+====================================== -->
+<div id="gameFullModal" class="game-full-modal hidden">
+    <div class="game-modal-header">
+        <button id="gameCloseBtn" class="game-back-btn">← Kembali</button>
+        <a id="gameOpenTabBtn" href="#" target="_blank" class="game-tab-btn">Buka Tab Baru</a>
+    </div>
+    <div class="game-iframe-full">
+        <iframe id="gameIframeFull" src="" frameborder="0" allow="fullscreen" allowfullscreen></iframe>
+    </div>
+</div>
+
+<!-- ======================================
+    === PANEL PILIH TEMA ===
+====================================== -->
+<div id="themePanel" class="theme-panel hidden">
+    <div class="theme-panel-header">
+        <h3>Pilih Tema</h3>
+        <button id="closeThemePanel" class="modal-close">✕</button>
+    </div>
+    <div class="theme-options">
         <button class="theme-option" data-theme="default">
-          <span class="theme-swatch default-swatch"></span>
-          <span>Default</span>
+            <span class="theme-dot blue"></span> Default
         </button>
         <button class="theme-option" data-theme="neobrutal">
-          <span class="theme-swatch brutal-swatch"></span>
-          <span>Neo-Brutal</span>
+            <span class="theme-dot yellow"></span> Neo-Brutal
         </button>
         <button class="theme-option" data-theme="dark">
-          <span class="theme-swatch dark-swatch"></span>
-          <span>Gelap</span>
+            <span class="theme-dot dark"></span> Gelap
         </button>
         <button class="theme-option" data-theme="nori">
-          <span class="theme-swatch nori-swatch"></span>
-          <span>Tema Pilihan</span>
+            <span class="theme-dot pink"></span> Pilihan Nori
         </button>
-      </div>
     </div>
-  </aside>
+</div>
 
-  <!-- Konten Utama -->
-  <main id="mainContent">
-    <!-- Halaman Skin -->
-    <section id="skinsPage" class="page active">
-      <div class="container">
-        <h2 class="page-title">Temukan Skin Favoritmu</h2>
-        <p class="page-desc">Berbagai koleksi skin Minecraft, gratis tanpa biaya apapun</p>
-        
-        <div class="stats-row">
-          <div class="stat-card">
-            <span class="stat-number" id="totalSkin">0</span>
-            <span class="stat-label">Skin</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number" id="skinCategories">5</span>
-            <span class="stat-label">Kategori</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">Gratis</span>
-            <span class="stat-label">Selamanya</span>
-          </div>
-        </div>
-
-        <div class="filter-tabs" id="skinFilters">
-          <button class="filter-tab active" data-filter="all">Semua</button>
-          <button class="filter-tab" data-filter="cowok">Cowok</button>
-          <button class="filter-tab" data-filter="cewek">Cewek</button>
-          <button class="filter-tab" data-filter="pvp">PVP</button>
-          <button class="filter-tab" data-filter="emote">Emote</button>
-          <button class="filter-tab" data-filter="pack">Skin Pack</button>
-        </div>
-
-        <div id="skinGrid" class="cards-grid"></div>
-        
-        <!-- Bagian Skin Couple -->
-        <h3 class="section-divider">💑 Skin Couple</h3>
-        <div id="coupleGrid" class="cards-grid couple-grid"></div>
-        
-        <!-- Bagian Skin JJ -->
-        <h3 class="section-divider">📸 Skin JJ — Galeri</h3>
-        <div id="skinjjGrid" class="cards-grid"></div>
-      </div>
-    </section>
-
-    <!-- Halaman Addon -->
-    <section id="addonsPage" class="page">
-      <div class="container">
-        <h2 class="page-title">Koleksi Addon</h2>
-        <p class="page-desc">Tambahkan pengalaman bermain Minecraft kamu dengan addon keren</p>
-        
-        <div class="stats-row">
-          <div class="stat-card">
-            <span class="stat-number" id="totalAddon">0</span>
-            <span class="stat-label">Addon</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">6</span>
-            <span class="stat-label">Kategori</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">Gratis</span>
-            <span class="stat-label">Selamanya</span>
-          </div>
-        </div>
-
-        <div class="filter-tabs" id="addonFilters">
-          <button class="filter-tab active" data-filter="all">Semua</button>
-          <button class="filter-tab" data-filter="addon">Addon</button>
-          <button class="filter-tab" data-filter="pack">Pack</button>
-          <button class="filter-tab" data-filter="shader">Shader</button>
-          <button class="filter-tab" data-filter="maps">Maps</button>
-          <button class="filter-tab" data-filter="horror">Horor</button>
-          <button class="filter-tab" data-filter="lain-lain">Lain-lain</button>
-        </div>
-
-        <div id="addonGrid" class="cards-grid landscape-grid"></div>
-      </div>
-    </section>
-
-    <!-- Halaman Game -->
-    <section id="gamePage" class="page">
-      <div class="container">
-        <h2 class="page-title">Mini Game & Tools</h2>
-        <p class="page-desc">Beristirahat sejenak dan mainkan permainan sederhana. Semua bisa dimainkan langsung tanpa instalasi.</p>
-        
-        <div class="filter-tabs" id="gameSubTabs">
-          <button class="filter-tab active" data-subpage="games">🎮 Game</button>
-          <button class="filter-tab" data-subpage="tools">🛠️ Tools</button>
-        </div>
-
-        <div id="gameContent">
-          <!-- Daftar game muncul di sini -->
-        </div>
-      </div>
-    </section>
-
-    <!-- Halaman Info -->
-    <section id="infoPage" class="page">
-      <div class="container">
-        <h2 class="page-title">Tentang ArpiMC Zone</h2>
-        <p class="page-desc">Satu tempat untuk semua kebutuhan Minecraft kamu — dibuat dengan cinta 💙</p>
-        
-        <div class="info-tabs">
-          <button class="info-tab active" data-info="saluran">📢 Saluran</button>
-          <button class="info-tab" data-info="sosmed">📱 Sosmed</button>
-          <button class="info-tab" data-info="grup">👥 Grup</button>
-          <button class="info-tab" data-info="website">🌐 Website</button>
-          <button class="info-tab" data-info="dukungan">💚 Dukung</button>
-        </div>
-
-        <div id="infoContent">
-          <!-- Konten info dimuat dari data.json -->
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <!-- Modal Detail Item -->
-  <div id="detailModal" class="modal-overlay">
-    <div class="modal-detail-container">
-      <button class="detail-back-btn" id="detailBackBtn">← Kembali</button>
-      <div class="detail-content">
-        <div class="detail-image-wrapper">
-          <img id="detailImage" src="" alt="" loading="lazy">
-        </div>
-        <h2 id="detailName"></h2>
-        <div class="detail-meta" id="detailMeta"></div>
-        <p id="detailDesc"></p>
-        
-        <!-- Khusus Skin JJ: Galeri Gambar -->
-        <div id="gallerySection" class="gallery-section hidden">
-          <h3>📸 Galeri Gambar</h3>
-          <div id="galleryImages" class="gallery-thumbs"></div>
-          <div class="download-options">
-            <button class="btn btn-secondary" id="downloadSingleBtn">📥 Unduh Gambar Ini</button>
-            <button class="btn btn-primary" id="downloadAllBtn">📦 Unduh Semua Gambar</button>
-          </div>
-        </div>
-        
-        <!-- Tombol Unduh -->
-        <div class="detail-actions">
-          <a id="detailDownload" href="" target="_blank" class="btn btn-primary btn-full">⬇️ Unduh</a>
-          <button id="shareBtn" class="btn btn-secondary">🔗 Bagikan Link</button>
-        </div>
-        
-        <!-- Rekomendasi Terkait -->
-        <div id="relatedSection" class="related-section hidden">
-          <h3>📦 Terkait</h3>
-          <div id="relatedGrid" class="related-grid"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Tampilan Penuh Game Iframe -->
-  <div id="gameFullscreen" class="game-fullscreen hidden">
-    <div class="game-header-bar">
-      <button class="game-back-btn" id="gameBackBtn">← Kembali</button>
-      <span id="gameTitleBar"></span>
-    </div>
-    <div class="game-iframe-wrapper">
-      <iframe id="gameIframe" title="Game"></iframe>
-    </div>
-  </div>
-
-  <!-- Navigasi Bawah -->
-  <nav class="bottom-nav">
-    <button class="nav-item active" data-page="skins">
-      <span class="nav-icon">S</span>
-      <span class="nav-label">Skin</span>
-    </button>
-    <button class="nav-item" data-page="addons">
-      <span class="nav-icon">A</span>
-      <span class="nav-label">Addon</span>
-    </button>
-    <button class="nav-item" data-page="game">
-      <span class="nav-icon">G</span>
-      <span class="nav-label">Game</span>
-    </button>
-    <button class="nav-item" data-page="info">
-      <span class="nav-icon">ℹ️</span>
-      <span class="nav-label">Info</span>
-    </button>
-  </nav>
-
-  <!-- Toast Notifikasi -->
-  <div id="toast" class="toast hidden"></div>
-
-  <!-- Scripts -->
-  <script src="script.js"></script>
+<!-- === SCRIPT === -->
+<script src="script.js"></script>
 </body>
 </html>

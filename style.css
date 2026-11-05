@@ -108,7 +108,7 @@ body {
   padding: 4px 10px;
 }
 
-/* === MENU TEMA — SELALU JELA WARNA === */
+/* === MENU TEMA — SELALU JELAS === */
 .theme-menu {
   position: fixed;
   top: 0;
@@ -195,14 +195,14 @@ body {
 
 .page-intro h2 {
   font-size: 1.45rem;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   color: var(--primary);
 }
 
 .page-intro p {
   color: var(--text-alt);
-  font-size: 0.92rem;
-  line-height: 1.5;
+  font-size: 0.95rem;
+  line-height: 1.6;
 }
 
 /* === STATISTIK === */
@@ -314,7 +314,7 @@ body {
   margin-top: auto;
 }
 
-/* === GRID KARTU — ADDON (LEBAR) === */
+/* === GRID KARTU — ADDON (LEBAR 16:9) === */
 .addon-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -415,12 +415,13 @@ body {
   font-size: 0.85rem;
   color: var(--text-alt);
   margin-bottom: 16px;
+  line-height: 1.4;
 }
 
 .game-iframe-container {
   position: relative;
   width: 100%;
-  aspect-ratio: 4/3;
+  aspect-ratio: 16/10;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--border);
@@ -437,6 +438,7 @@ body {
 .game-links {
   display: flex;
   gap: 8px;
+  flex-wrap: wrap;
 }
 
 /* === TOMBOL === */
@@ -473,8 +475,9 @@ body {
 }
 
 .btn-small {
-  padding: 6px 10px;
+  padding: 8px 10px;
   font-size: 0.78rem;
+  flex: none;
 }
 
 /* === MODAL PREVIEW === */

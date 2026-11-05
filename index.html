@@ -1,73 +1,33 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ArpiMC Zone</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MC Addon Saya 🎮</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- HEADER -->
-<header class="header">
-    <h1>ArpiMC Zone</h1>
-</header>
 
-<!-- NAVIGASI -->
-<nav class="nav">
-    <button class="nav-btn active" data-page="skin">Skin</button>
-    <button class="nav-btn" data-page="addon">Addon</button>
-    <button class="nav-btn" data-page="game">Game</button>
-    <button class="nav-btn" data-page="info">Info</button>
-</nav>
+  <header>
+    <h1>⛏️ MC Addon Share Saya</h1>
+    <p>Kumpulan addon & mod Minecraft favoritku!</p>
+  </header>
 
-<!-- KONTEN -->
-<main>
-    <!-- HALAMAN SKIN -->
-    <section id="skinPage" class="page active">
-        <h2>Koleksi Skin</h2>
-        <div class="filter">
-            <button class="filter-btn active" data-filter="semua">Semua</button>
-            <button class="filter-btn" data-filter="cowok">Cowok</button>
-            <button class="filter-btn" data-filter="cewek">Cewek</button>
-        </div>
-        <div class="grid" id="skinGrid">Memuat data...</div>
-    </section>
-
-    <!-- HALAMAN ADDON -->
-    <section id="addonPage" class="page">
-        <h2>Koleksi Addon</h2>
-        <div class="filter">
-            <button class="filter-btn active" data-filter="semua">Semua</button>
-            <button class="filter-btn" data-filter="addon">Addon</button>
-            <button class="filter-btn" data-filter="maps">Maps</button>
-        </div>
-        <div class="list" id="addonGrid">Memuat data...</div>
-    </section>
-
-    <!-- HALAMAN GAME -->
-    <section id="gamePage" class="page">
-        <h2>Mini Game</h2>
-        <div class="grid" id="gameGrid">Memuat data...</div>
-    </section>
-
-    <!-- HALAMAN INFO -->
-    <section id="infoPage" class="page">
-        <h2>Info</h2>
-        <div id="infoContent">Memuat data...</div>
-    </section>
-</main>
-
-<!-- MODAL PREVIEW -->
-<div id="previewModal" class="modal">
-    <div class="modal-content">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <h3 id="modalTitle">Preview</h3>
-        <img id="modalImg" src="" alt="">
-        <p id="modalDesc"></p>
-        <a id="modalDownload" href="" target="_blank" class="download-btn">Unduh</a>
+  <main>
+    <div class="stats">
+      <div><span id="total">0</span> Total Addon</div>
     </div>
-</div>
 
-<script src="script.js"></script>
+    <h2>🔥 Daftar Addon</h2>
+    <div id="daftar" class="grid">
+      <!-- Isi otomatis dari data.json -->
+    </div>
+  </main>
+
+  <footer>
+    <p>Dibuat dengan ❤️ — MC Addon Share</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>

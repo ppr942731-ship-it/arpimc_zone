@@ -3,29 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MC Addon Saya 🎮</title>
+  <title>MC Skin Gallery 🎮</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <header>
-    <h1>⛏️ MC Addon Share Saya</h1>
-    <p>Kumpulan addon & mod Minecraft favoritku!</p>
-  </header>
+  <div class="container">
+    <header class="header-box">
+      <h1>🎨 MC Skin Gallery</h1>
+      <p>Koleksi skin Minecraft favoritmu</p>
+    </header>
 
-  <main>
-    <div class="stats">
-      <div><span id="total">0</span> Total Addon</div>
+    <div class="stats-box">
+      <span id="total-skins">0</span> Skin Tersedia
     </div>
 
-    <h2>🔥 Daftar Addon</h2>
-    <div id="daftar" class="grid">
-      <!-- Isi otomatis dari data.json -->
+    <h2 class="section-title">📁 Daftar Skin</h2>
+    <div id="skin-grid" class="skin-grid">
+      <!-- Skin cards muncul di sini -->
     </div>
-  </main>
+  </div>
 
-  <footer>
-    <p>Dibuat dengan ❤️ — MC Addon Share</p>
+  <footer class="footer-box">
+    <p>Dibuat dengan ❤️ — MC Skin Gallery</p>
   </footer>
 
   <script src="script.js"></script>

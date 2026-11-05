@@ -335,55 +335,11 @@ function applyAddonFilter() {
   grid.innerHTML = html;
 }
 
-// ---------- RENDER GAME ----------
-function renderGames() {
-  const content = document.getElementById('gameContent');
-  const subTabs = document.querySelectorAll('#gameSubTabs .filter-tab');
-  
-  subTabs.forEach(tab => {
-    tab.onclick = () => {
-      subTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentGameSubpage = tab.getAttribute('data-subpage');
-      renderGameContent();
-    };
-  });
-  
-  renderGameContent();
-}
-
-function renderGameContent() {
-  const content = document.getElementById('gameContent');
-  let filtered = allGames;
-  
-  if (currentGameSubpage !== 'all') {
-    filtered = allGames.filter(g => g.tipe === currentGameSubpage);
-  }
-  
-  let html = '<div class="cards-grid">';
-  if (!filtered || filtered.length === 0) {
-    html += '<p style="grid-column:1/-1;text-align:center;color:var(--text-secondary);padding:40px 0;">Belum ada konten</p>';
-  } else {
-    filtered.forEach(game => {
-      html += `
-        <div class="skin-card" onclick="openGameFull('${game.link}', '${game.nama.replace(/'/g, "\\'")}')">
-          ${game.gambar 
+${game.gambar 
   ? `<img src="${game.gambar}" alt="${game.nama}" loading="lazy">` 
   : `<div style="height:120px;display:flex;align-items:center;justify-content:center;background:var(--bg-primary);color:var(--text-secondary);font-size:40px;">🎮</div>`
 }
 
-          <div class="card-body">
-            <h3 class="card-title">${game.nama}</h3>
-            <p class="card-desc">${game.deskripsi || ''}</p>
-            <button class="btn btn-primary btn-full">▶ Mainkan</button>
-          </div>
-        </div>`;
-    });
-  }
-  html += '</div>';
-  
-  content.innerHTML = html;
-}
 
 // ---------- BUKA GAME DI IFRAME PENUH ----------
 function openGameFull(link, nama) {

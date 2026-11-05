@@ -1,1 +1,17 @@
-
+[
+  {
+    "id": 0,
+    "nama": "Skin JJ — Style Keren",
+    "deskripsi": "Tampilan skin dari berbagai sudut pandang",
+    "gambar_utama": "https://files.catbox.moe/link-utama.jpg",
+    "galeri": [
+      "https://files.catbox.moe/foto-1.jpg",
+      "https://files.catbox.moe/foto-2.jpg",
+      "https://files.catbox.moe/foto-3.jpg",
+      "https://files.catbox.moe/foto-4.jpg"
+    ],
+    "download_gambar": "https://www.mediafire.com/link-untuk-gambar",
+    "download_skin": "https://www.mediafire.com/link-untuk-skin",
+    "tanggal_upload": "27 Okt 2026"
+  }
+]

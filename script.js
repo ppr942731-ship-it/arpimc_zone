@@ -1,19 +1,24 @@
-// Baca file data.json
 fetch('data.json')
   .then(res => res.json())
   .then(data => {
-    const daftar = document.getElementById('daftar');
-    document.getElementById('total').textContent = data.length;
+    const grid = document.getElementById('skin-grid');
+    document.getElementById('total-skins').textContent = data.length;
 
-    data.forEach(item => {
-      daftar.innerHTML += `
-        <div class="card">
-          <h3>${item.nama}</h3>
-          <span class="cat">${item.kategori}</span>
-          <p class="dl">⬇️ ${item.unduhan} unduhan</p>
-          <a href="${item.link}" target="_blank">Download</a>
+    data.forEach(skin => {
+      grid.innerHTML += `
+        <div class="skin-card">
+          <img src="${skin.link_gambar}" alt="${skin.nama}" class="skin-img" loading="lazy">
+          <div class="skin-info">
+            <h3 class="skin-name">${skin.nama}</h3>
+            <p class="skin-desc">${skin.deskripsi}</p>
+            <p class="skin-date">📅 Diunggah: ${skin.tanggal_upload}</p>
+            <a href="${skin.link_download}" target="_blank" class="btn-download">⬇️ Download Skin</a>
+          </div>
         </div>
       `;
     });
   })
-  .catch(err => console.log('Error:', err));
+  .catch(err => {
+    console.error('Error:', err);
+    document.getElementById('skin-grid').innerHTML = '<p style="text-align:center;color:#f87171;">Gagal memuat data 😢</p>';
+  });

@@ -579,3 +579,11 @@ body {
   font-size: 0.7rem;
   font-weight: 500;
 }
+/* Tombol Bagikan WhatsApp */
+.btn-wa {
+  background: #25D366;
+  color: white;
+}
+.btn-wa:hover {
+  background: #128C7E;
+}

@@ -5,8 +5,8 @@ fetch('data.json')
   .then(res => res.json())
   .then(data => {
     skinData = data;
+    document.getElementById('totalSkin').textContent = data.length;
     renderSkins('all');
-    updateCounter();
   })
   .catch(err => console.error('Error memuat data:', err));
 
@@ -21,28 +21,15 @@ function renderSkins(category) {
 
   filtered.forEach(skin => {
     list.innerHTML += `
-      <div class="card" data-cat="${skin.kategori}" data-id="${skin.id}">
+      <div class="card" data-cat="${skin.kategori}">
         <span class="tag">${skin.tag}</span>
-        <img loading="lazy" src="${skin.gambar}" alt="${skin.tag}">
-        <div class="meta">
-          <span>👁 <span class="views">0</span></span>
-          <span>⬇ <span class="downloads">0</span></span>
-        </div>
-        <a href="${skin.link_download}" target="_blank" class="btn download-btn">DOWNLOAD</a>
+        <img loading="lazy" src="${skin.gambar}" alt="${skin.nama}">
+        <p style="font-weight:600; margin:8px 0 4px;">${skin.nama}</p>
+        <p style="font-size:0.85em; color:var(--muted); margin-bottom:8px;">${skin.deskripsi}</p>
+        <p style="font-size:0.8em; color:var(--muted); margin-bottom:12px;">📅 ${skin.tanggal_upload}</p>
+        <a href="${skin.link_download}" target="_blank" class="btn">⬇️ DOWNLOAD SKIN</a>
       </div>
     `;
-  });
-
-  // Pasang event listener untuk tombol download
-  document.querySelectorAll('.download-btn').forEach(btn => {
-    btn.onclick = () => {
-      const card = btn.parentElement;
-      const id = card.dataset.id;
-      const key = 'skin_' + id + '_dl';
-      let dl = parseInt(localStorage.getItem(key) || 0) + 1;
-      localStorage.setItem(key, dl);
-      card.querySelector('.downloads').innerText = dl;
-    };
   });
 }
 
@@ -57,38 +44,12 @@ themeBtn.onclick = () => {
   localStorage.theme = body.classList.contains('dark') ? 'dark' : 'light';
 };
 
-// ===== UPDATE PENGHITUNG =====
-function updateCounter() {
-  document.querySelectorAll('.card').forEach((card) => {
-    const id = card.dataset.id;
-    const viewKey = 'skin_' + id + '_views';
-    const dlKey = 'skin_' + id + '_dl';
-
-    let views = localStorage.getItem(viewKey) || Math.floor(Math.random() * 500);
-    let downloads = localStorage.getItem(dlKey) || Math.floor(Math.random() * 100);
-
-    card.querySelector('.views').innerText = views;
-    card.querySelector('.downloads').innerText = downloads;
-
-    localStorage.setItem(viewKey, parseInt(views) + 1);
-  });
-
-  // Total Views
-  let total = 0;
-  for(let i = 0; i < localStorage.length; i++) {
-    const key = localStorage.key(i);
-    if(key.includes('_views')) total += parseInt(localStorage.getItem(key));
-  }
-  document.getElementById('totalViews').innerText = total.toLocaleString('id');
-}
-
 // ===== FILTER KATEGORI =====
 document.querySelectorAll('.cat-btn').forEach(btn => {
   btn.onclick = () => {
     document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     renderSkins(btn.dataset.cat);
-    setTimeout(updateCounter, 100);
   };
 });
 

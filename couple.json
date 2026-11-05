@@ -1,1 +1,12 @@
-
+[
+  {
+    "id": 0,
+    "nama": "Pasangan Seri Bunga",
+    "deskripsi": "Skin couple yang serasi untuk kamu dan pasangan",
+    "gambar_cowok": "link-gambar-cowok.png",
+    "gambar_cewek": "link-gambar-cewek.png",
+    "download_cowok": "link-unduh-cowok",
+    "download_cewek": "link-unduh-cewek",
+    "tanggal_upload": "27 Okt 2026"
+  }
+]

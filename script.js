@@ -78,7 +78,7 @@ function renderGames() {
       <p class="game-desc">${item.deskripsi}</p>
       <div class="game-iframe-container">
         <iframe src="${item.link}" title="${item.nama}" loading="lazy"
-          sandbox="allow-same-origin allow-scripts allow-forms"></iframe>
+          sandbox="allow-same-origin allow-scripts"></iframe>
       </div>
       <div class="game-links">
         <a href="${item.link}" target="_blank" class="btn btn-primary">Buka Penuh</a>
@@ -90,18 +90,9 @@ function renderGames() {
 
 // === PREVIEW MODAL ===
 const modal = document.getElementById('previewModal');
-let modalImage, modalTitle, modalClose;
-
-function initModal() {
-  modalImage = document.getElementById('modalImage');
-  modalTitle = document.getElementById('modalTitle');
-  modalClose = document.getElementById('modalClose');
-  
-  modalClose.addEventListener('click', closeModal);
-  modal.addEventListener('click', (e) => {
-    if (e.target === modal) closeModal();
-  });
-}
+const modalTitle = document.getElementById('modalTitle');
+const modalImage = document.getElementById('modalImage');
+const modalClose = document.getElementById('modalClose');
 
 function attachPreviewEvents() {
   document.querySelectorAll('[data-preview]').forEach(btn => {
@@ -114,12 +105,16 @@ function attachPreviewEvents() {
   });
 }
 
-function closeModal() {
+modalClose.addEventListener('click', () => {
   modal.classList.remove('active');
   document.body.style.overflow = '';
-  if (modalImage) modalImage.src = '';
-  if (modalTitle) modalTitle.textContent = '';
-}
+  modalImage.src = '';
+  modalTitle.textContent = '';
+});
+
+modal.addEventListener('click', (e) => {
+  if (e.target === modal) modalClose.click();
+});
 
 // === NAVIGASI BAWAH ===
 document.querySelectorAll('.nav-item').forEach(item => {
@@ -162,9 +157,7 @@ menuToggle.addEventListener('click', () => {
 });
 
 themeMenu.addEventListener('click', (e) => {
-  if (e.target === themeMenu) {
-    themeMenu.classList.remove('active');
-  }
+  if (e.target === themeMenu) themeMenu.classList.remove('active');
 });
 
 document.querySelectorAll('.theme-option').forEach(btn => {
@@ -181,12 +174,8 @@ document.querySelectorAll('.theme-option').forEach(btn => {
   });
 });
 
-// === INISIALISASI ===
-document.addEventListener('DOMContentLoaded', () => {
-  initModal();
-  
-  const savedTheme = localStorage.getItem('theme');
-  if (savedTheme) {
-    document.documentElement.setAttribute('data-theme', savedTheme);
-  }
-});
+// === MUAT TEMA YANG DISIMPAN ===
+const savedTheme = localStorage.getItem('theme');
+if (savedTheme) {
+  document.documentElement.setAttribute('data-theme', savedTheme);
+}

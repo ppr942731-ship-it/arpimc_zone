@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArpiMC Zone</title>
-  <meta name="description" content="Koleksi skin, addon, dan permainan untuk Minecraft — lengkap dan mudah diunduh, gratis tanpa biaya apapun">
+  <meta name="description" content="Koleksi skin, addon, dan permainan Minecraft — gratis dan mudah diunduh">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
@@ -13,82 +13,78 @@
 
   <!-- Header -->
   <header class="site-header">
-    <a href="/" class="header-logo-link">
-      <img src="https://files.catbox.moe/7vkqqk.jpg" alt="ArpiMC Zone" class="site-logo">
-    </a>
-    <h1 class="site-title">ArpiMC Zone</h1>
-    <button class="menu-toggle" id="menuToggle">☰</button>
+    <img src="https://files.catbox.moe/7vkqqk.jpg" alt="Logo" class="logo">
+    <h1>ArpiMC Zone</h1>
+    <button class="theme-btn" id="themeBtn">☰</button>
   </header>
 
-  <!-- Menu Pilihan Tema -->
+  <!-- Menu Tema -->
   <div class="theme-menu" id="themeMenu">
-    <div class="theme-menu-content">
-      <h3>Pilih Tema</h3>
-      <button class="theme-option" data-theme="default">Default</button>
-      <button class="theme-option" data-theme="neobrutal">Neo-Brutaslim</button>
-      <button class="theme-option" data-theme="dark">Dark</button>
-      <button class="theme-option" data-theme="nori">Tema Nori</button>
-    </div>
+    <h3>Pilih Tema</h3>
+    <button data-theme="default">Default</button>
+    <button data-theme="neobrutal">Neo-Brutal</button>
+    <button data-theme="dark">Gelap</button>
+    <button data-theme="nori">Tema Nori</button>
   </div>
 
   <main class="container">
     <!-- Halaman Skin -->
     <section id="skinsPage" class="page active">
-      <div class="page-intro">
+      <div class="intro">
         <h2>Koleksi Skin</h2>
-        <p>Temukan skin favoritmu, langsung unduh tanpa ribet. Semua yang ada di sini gratis, tanpa biaya apapun.</p>
+        <p>Temukan skin favoritmu, langsung unduh tanpa ribet. Semua gratis, tanpa biaya apapun.</p>
       </div>
-      <div class="stats-row">
-        <div class="stat-card"><span id="totalSkin">0</span><small>Skin</small></div>
-        <div class="stat-card"><span>5</span><small>Kategori</small></div>
-        <div class="stat-card"><span>Gratis</span><small>Selamanya</small></div>
+      <div class="stats">
+        <div class="stat-item"><span id="totalSkin">0</span><small>Skin</small></div>
+        <div class="stat-item"><span>5</span><small>Kategori</small></div>
+        <div class="stat-item"><span>Gratis</span><small>Selamanya</small></div>
       </div>
-      <div class="filter-bar" id="skinFilters">
-        <button class="filter-btn active" data-cat="all">Semua</button>
-        <button class="filter-btn" data-cat="cowok">Cowok</button>
-        <button class="filter-btn" data-cat="cewek">Cewek</button>
-        <button class="filter-btn" data-cat="pvp">PVP</button>
-        <button class="filter-btn" data-cat="template">Template Skin</button>
-        <button class="filter-btn" data-cat="pack">Skin Pack</button>
+      <div class="filters" id="skinFilters">
+        <button class="filter-active" data-cat="all">Semua</button>
+        <button data-cat="cowok">Cowok</button>
+        <button data-cat="cewek">Cewek</button>
+        <button data-cat="pvp">PVP</button>
+        <button data-cat="template">Template</button>
+        <button data-cat="pack">Skin Pack</button>
       </div>
-      <div class="skin-grid" id="skinGrid"></div>
+      <div class="grid-skin" id="skinGrid"></div>
     </section>
 
     <!-- Halaman Addon -->
     <section id="addonsPage" class="page">
-      <div class="page-intro">
+      <div class="intro">
         <h2>Koleksi Addon</h2>
         <p>Tambahkan pengalaman baru ke dalam permainanmu. Langsung unduh dan gunakan secara bebas.</p>
       </div>
-      <div class="stats-row">
-        <div class="stat-card"><span id="totalAddon">0</span><small>Item</small></div>
-        <div class="stat-card"><span>5</span><small>Kategori</small></div>
-        <div class="stat-card"><span>Gratis</span><small>Selamanya</small></div>
+      <div class="stats">
+        <div class="stat-item"><span id="totalAddon">0</span><small>Item</small></div>
+        <div class="stat-item"><span>5</span><small>Kategori</small></div>
+        <div class="stat-item"><span>Gratis</span><small>Selamanya</small></div>
       </div>
-      <div class="filter-bar" id="addonFilters">
-        <button class="filter-btn active" data-cat="all">Semua</button>
-        <button class="filter-btn" data-cat="addon">Addon</button>
-        <button class="filter-btn" data-cat="pack">Pack</button>
-        <button class="filter-btn" data-cat="shader">Shader</button>
-        <button class="filter-btn" data-cat="ui">UI</button>
-        <button class="filter-btn" data-cat="lain">Lain-lain</button>
+      <div class="filters" id="addonFilters">
+        <button class="filter-active" data-cat="all">Semua</button>
+        <button data-cat="addon">Addon</button>
+        <button data-cat="pack">Pack</button>
+        <button data-cat="shader">Shader</button>
+        <button data-cat="ui">UI</button>
+        <button data-cat="lain">Lain-lain</button>
       </div>
-      <div class="addon-grid" id="addonGrid"></div>
+      <div class="grid-addon" id="addonGrid"></div>
     </section>
 
     <!-- Halaman Game -->
     <section id="gamesPage" class="page">
-      <div class="page-intro">
+      <div class="intro">
         <h2>Mini Game</h2>
         <p>Beristirahat sejenak dan mainkan permainan sederhana. Semua bisa dimainkan langsung tanpa instalasi.</p>
       </div>
-      <div class="game-grid" id="gameGrid"></div>
+      <div class="grid-game" id="gameGrid"></div>
     </section>
   </main>
 
   <!-- Modal Preview -->
-  <div class="modal-overlay" id="previewModal">
-    <div class="modal-content">
+  <div class="modal" id="previewModal">
+    <div class="modal-box">
       <h3 id="modalTitle"></h3>
       <img id="modalImage" alt="">
       <button class="modal-close" id="modalClose">Tutup</button>
@@ -97,25 +93,23 @@
 
   <!-- Navigasi Bawah -->
   <nav class="bottom-nav">
-    <button class="nav-item active" data-page="skins">
+    <button class="nav-active" data-page="skins">
       <span class="nav-icon">S</span>
-      <span class="nav-label">Skin</span>
+      <span class="nav-text">Skin</span>
     </button>
-    <button class="nav-item" data-page="addons">
+    <button data-page="addons">
       <span class="nav-icon">A</span>
-      <span class="nav-label">Addon</span>
+      <span class="nav-text">Addon</span>
     </button>
-    <button class="nav-item" data-page="games">
+    <button data-page="games">
       <span class="nav-icon">G</span>
-      <span class="nav-label">Game</span>
+      <span class="nav-text">Game</span>
     </button>
   </nav>
 
   <script src="script.js"></script>
   
-  <!-- Cloudflare Web Analytics -->
+  <!-- Cloudflare Analytics -->
   <script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "d2823010cfef49e9b6b122f5ff9ea46a"}'></script>
-  <!-- End Cloudflare Web Analytics -->
-  
 </body>
 </html>

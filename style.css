@@ -658,27 +658,6 @@ img {
   font-size: 13px;
 }
 
-/* Preview Gambar Saja */
-.preview-modal-content {
-  background-color: transparent;
-  max-width: 90vw;
-}
-
-.preview-modal-content img {
-  max-width: 100%;
-  max-height: 70vh;
-  border-radius: var(--radius-md);
-}
-
-.preview-close-btn {
-  position: absolute;
-  top: -45px;
-  right: 0;
-  color: white;
-  font-size: 30px;
-  padding: 6px 14px;
-}
-
 /* ---------- HALAMAN GAME PENUH IFRAME ---------- */
 .game-fullscreen {
   position: fixed;
@@ -826,8 +805,7 @@ img {
   border-radius: var(--radius-md);
   font-size: 14px;
   z-index: 500;
-  animation: toastIn 0
-0.3s ease;
+  animation: toastIn 0.3s ease;
 }
 
 @keyframes toastIn {
@@ -835,33 +813,4 @@ img {
   to { bottom: 100px; opacity: 1; }
 }
 
-/* ---------- RESPONSIVE ---------- */
-@media (min-width: 768px) {
-  .cards-grid {
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  }
-  
-  .landscape-grid {
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-  }
-  
-  .stats-row {
-    gap: 20px;
-  }
-}
-
-@media (max-width: 400px) {
-  .filter-tabs {
-    gap: 6px;
-  }
-  
-  .filter-tab {
-    padding: 6px 12px;
-    font-size: 13px;
-  }
-  
-  .cards-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 12px;
-  }
-}
+/* ---------- RESPONS

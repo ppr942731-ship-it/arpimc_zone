@@ -1,380 +1,457 @@
-/* =============================================
-   === ARPIMC ZONE — SCRIPT.JS ===
-   === ID-based Link + Fullscreen Modal + Share Preview ===
-   ============================================= */
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
 
-let allSkins = [];
-let allAddons = [];
-let allGames = [];
-let currentFilter = 'all';
-let currentAddonFilter = 'all';
+const state = {
+  route: 'skin',
+  filter: 'semua',
+  items: [],
+  current: null,
+  theme: localStorage.getItem('arpimc-theme') || 'default'
+};
 
-// =============================================
-// === MUAT DATA DARI JSON ===
-// =============================================
-async function loadAllData() {
+const views = {
+  listing: $('#listingView'),
+  detail: $('#detailView'),
+  info: $('#infoView')
+};
+
+const els = {
+  pageTitle: $('#pageTitle'),
+  pageDescription: $('#pageDescription'),
+  stats: $('#stats'),
+  filters: $('#filters'),
+  cards: $('#cards'),
+  detailType: $('#detailType'),
+  detailTitle: $('#detailTitle'),
+  detailDescription: $('#detailDescription'),
+  detailMeta: $('#detailMeta'),
+  detailActions: $('#detailActions'),
+  previewWrap: $('#previewWrap'),
+  previewFrame: $('#previewFrame'),
+  backButton: $('#backButton'),
+  backButtonGame: $('#backButtonGame'),
+  gameToolbar: $('#gameToolbar'),
+  gameNewTab: $('#gameNewTab'),
+  toast: $('#toast'),
+  themePanel: $('#themePanel'),
+  themeOpen: $('#themeOpen'),
+  themeClose: $('#themeClose')
+};
+
+const routes = {
+  skin: {
+    title: 'Koleksi Skin',
+    desc: 'Temukan skin favoritmu, langsung unduh tanpa ribet.',
+    file: '/skins.json',
+    typeLabel: 'SKIN'
+  },
+  addon: {
+    title: 'Koleksi Addon',
+    desc: 'Kumpulan addon keren untuk Minecraft kamu.',
+    file: '/addons.json',
+    typeLabel: 'ADDON'
+  },
+  game: {
+    title: 'Koleksi Game',
+    desc: 'Mainkan game seru langsung dari browser.',
+    file: '/games.json',
+    typeLabel: 'GAME'
+  },
+  info: {
+    title: 'Info ArpiMC Zone',
+    desc: 'Panduan penggunaan website dan informasi tentang komunitas ArpiMC.',
+    file: null,
+    typeLabel: 'INFO'
+  }
+};
+
+function setTheme(name) {
+  document.documentElement.setAttribute('data-theme', name === 'default' ? '' : name);
+  state.theme = name;
+  localStorage.setItem('arpimc-theme', name);
+}
+
+function showToast(msg) {
+  els.toast.textContent = msg;
+  els.toast.classList.remove('hidden');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(() => els.toast.classList.add('hidden'), 2200);
+}
+
+function hideAllViews() {
+  views.listing.classList.add('hidden');
+  views.detail.classList.add('hidden');
+  views.info.classList.add('hidden');
+}
+
+function setActiveNav(routeName) {
+  $$('.nav-item').forEach(item => {
+    item.classList.toggle('active', item.dataset.route === routeName);
+  });
+}
+
+async function loadJson(url) {
   try {
-    const [skinsRes, addonsRes, gamesRes] = await Promise.all([
-      fetch('skins.json'),
-      fetch('addons.json'),
-      fetch('games.json')
-    ]);
-
-    allSkins = await skinsRes.json();
-    allAddons = await addonsRes.json();
-    allGames = await gamesRes.json();
-
-    document.getElementById('totalSkin').textContent = allSkins.length;
-    
-    renderSkins();
-    renderAddons();
-    renderGames();
-    
-    checkIdFromURL();
-  } catch (err) {
-    console.error('Gagal memuat data:', err);
+    const res = await fetch(url, { cache: 'no-store' });
+    if (!res.ok) throw new Error('fetch gagal');
+    return await res.json();
+  } catch (e) {
+    console.warn('Gagal memuat', url, e);
+    return window.fallbackData?.[url] ?? [];
   }
 }
 
-// =============================================
-// === BACA ID DARI LINK & BUKA MODAL OTOMATIS ===
-// =============================================
-function checkIdFromURL() {
-  const params = new URLSearchParams(window.location.search);
-  const skinId = params.get('id');
-  
-  if (skinId !== null) {
-    const id = parseInt(skinId);
-    const skin = allSkins.find(s => s.id === id);
-    if (skin) {
-      bukaModalSkinFull(skin);
-      updateMetaShare(skin);
-    }
-  }
+function renderStats(list) {
+  const total = list.length;
+  els.stats.innerHTML = `
+    <div class="stat-card">
+      <strong>${total}</strong>
+      <span>Total Item</span>
+    </div>
+    <div class="stat-card">
+      <strong>${new Set(list.map(i => i.category)).size}</strong>
+      <span>Kategori</span>
+    </div>
+    <div class="stat-card">
+      <strong>${new Set(list.map(i => i.author)).size}</strong>
+      <span>Kreator</span>
+    </div>
+  `;
 }
 
-// =============================================
-// === UPDATE META UNTUK PREVIEW SHARE ===
-// =============================================
-function updateMetaShare(skin) {
-  const baseUrl = window.location.origin + window.location.pathname;
-  const shareUrl = `${baseUrl}?id=${skin.id}`;
-  
-  let ogTitle = document.querySelector('meta[property="og:title"]');
-  let ogDesc = document.querySelector('meta[property="og:description"]');
-  let ogImage = document.querySelector('meta[property="og:image"]');
-  let ogUrl = document.querySelector('meta[property="og:url"]');
-  
-  if (!ogTitle) {
-    ogTitle = document.createElement('meta');
-    ogTitle.setAttribute('property', 'og:title');
-    document.head.appendChild(ogTitle);
-  }
-  if (!ogDesc) {
-    ogDesc = document.createElement('meta');
-    ogDesc.setAttribute('property', 'og:description');
-    document.head.appendChild(ogDesc);
-  }
-  if (!ogImage) {
-    ogImage = document.createElement('meta');
-    ogImage.setAttribute('property', 'og:image');
-    document.head.appendChild(ogImage);
-  }
-  if (!ogUrl) {
-    ogUrl = document.createElement('meta');
-    ogUrl.setAttribute('property', 'og:url');
-    document.head.appendChild(ogUrl);
-  }
-  
-  ogTitle.setAttribute('content', skin.tag);
-  ogDesc.setAttribute('content', skin.deskripsi || 'Unduh gratis di ArpiMC Zone');
-  ogImage.setAttribute('content', skin.gambar);
-  ogUrl.setAttribute('content', shareUrl);
-  
-  document.title = `${skin.tag} | ArpiMC Zone`;
+function renderFilters(categories) {
+  const cats = ['semua', ...new Set(categories)];
+  els.filters.innerHTML = cats.map(cat => `
+    <button class="filter-tab ${state.filter === cat ? 'active' : ''}" data-filter="${cat}">
+      ${cat}
+    </button>
+  `).join('');
+
+  $$('.filter-tab').forEach(btn => {
+    btn.onclick = () => {
+      state.filter = btn.dataset.filter;
+      renderCards(state.items);
+      renderFilters(state.items.map(i => i.category));
+    };
+  });
 }
 
-// =============================================
-// === RENDER KARTU SKIN — TIDAK ADA UNDEFINED ===
-// =============================================
-function renderSkins() {
-  const container = document.getElementById('skinContent');
-  let filtered = allSkins;
+function getItemRatioClass(item) {
+  if (state.route === 'skin') return 'skin-ratio';
+  if (state.route === 'addon') return 'addon-ratio';
+  if (state.route === 'game') return 'game-ratio';
+  return '';
+}
 
-  if (currentFilter !== 'all') {
-    filtered = allSkins.filter(skin => skin.kategori === currentFilter);
-  }
+function renderCards(list) {
+  const filtered = state.filter === 'semua'
+    ? list
+    : list.filter(i => i.category === state.filter);
 
   if (filtered.length === 0) {
-    container.innerHTML = '<p class="loading-text">Skin tidak ditemukan</p>';
+    els.cards.innerHTML = `<p class="empty">Koleksi ini belum ada item.</p>`;
     return;
   }
 
-  container.innerHTML = filtered.map(skin => `
-    <div class="skin-card">
-      <div class="card-image-wrapper" onclick='bukaModalSkinFull(${JSON.stringify(skin).replace(/'/g, "\\'").replace(/"/g, '&quot;')})'>
-        <img src="${skin.gambar}" alt="${skin.tag}" loading="lazy">
+  els.cards.innerHTML = filtered.map(item => {
+    const ratioClass = getItemRatioClass(item);
+    return `
+      <article class="content-card ${ratioClass}">
+        <button class="card-media-button open-detail">
+          <div class="card-media">
+            <img class="card-image" src="${item.thumb}" alt="${item.name}" loading="lazy" onerror="this.parentElement.classList.add('image-error')">
+          </div>
+        </button>
+        <div class="card-body">
+          <p class="card-kicker">${item.category ?? 'Umum'}</p>
+          <h3 class="card-title">${item.name}</h3>
+          <p class="card-desc">${item.desc}</p>
+          <div class="card-actions">
+            <a class="card-button" href="${item.download}" target="_blank" rel="noopener">Unduh</a>
+            <button class="card-button card-download" data-id="${item.id}">Detail</button>
+          </div>
+          <button class="card-share" data-share-name="${item.name}" data-share-url="${item.shareUrl ?? location.href}">Bagikan</button>
+        </div>
+      </article>
+    `;
+  }).join('');
+
+  $$('.open-detail, .card-download').forEach(btn => {
+    btn.onclick = () => {
+      const id = btn.dataset.id ?? btn.closest('.content-card')?.querySelector('.card-download')?.dataset.id;
+      const found = filtered.find(i => i.id == id);
+      if (found) openDetail(found);
+    };
+  });
+
+  $$('.card-share').forEach(btn => {
+    btn.onclick = async () => {
+      const name = btn.dataset.shareName;
+      const url = btn.dataset.shareUrl;
+      try {
+        await navigator.share({ title: name, url });
+      } catch {
+        navigator.clipboard?.writeText(url);
+        showToast('Link disalin!');
+      }
+    };
+  });
+}
+
+function openDetail(item) {
+  state.current = item;
+  hideAllViews();
+  views.listing.classList.remove('hidden');
+  views.detail.classList.remove('hidden');
+
+  els.detailType.textContent = routes[state.route].typeLabel;
+  els.detailTitle.textContent = item.name;
+  els.detailDescription.textContent = item.desc;
+
+  els.detailMeta.innerHTML = `
+    <div class="meta-line"><b>Kreator:</b> ${item.author ?? 'Anonim'}</div>
+    <div class="meta-line"><b>Kategori:</b> ${item.category ?? 'Umum'}</div>
+  `;
+
+  els.detailActions.innerHTML = `
+    <a class="action-button" href="${item.download}" target="_blank" rel="noopener">Unduh Sekarang</a>
+    <button class="action-button secondary" id="copyShareBtn">Salin Link</button>
+  `;
+
+  $('#copyShareBtn').onclick = async () => {
+    await navigator.clipboard?.writeText(item.shareUrl ?? location.href);
+    showToast('Link detail disalin!');
+  };
+
+  if (state.route === 'game') {
+    els.previewWrap.classList.add('game-preview');
+    els.previewWrap.classList.remove('image-preview', 'addon-preview');
+    els.gameToolbar.classList.remove('hidden');
+    els.previewFrame.src = item.preview;
+    els.gameNewTab.href = item.preview;
+  } else if (state.route === 'skin') {
+    els.previewWrap.classList.add('image-preview');
+    els.previewWrap.classList.remove('game-preview', 'addon-preview');
+    els.gameToolbar.classList.add('hidden');
+    els.previewFrame.srcdoc = `<style>body{margin:0;display:grid;place-items:center;background:var(--bg-alt,#edf4ff)}</style><img src="${item.thumb}" style="max-height:90vh;max-width:100%;">`;
+  } else {
+    els.previewWrap.classList.add('addon-preview');
+    els.previewWrap.classList.remove('game-preview', 'image-preview');
+    els.gameToolbar.classList.add('hidden');
+    els.previewFrame.src = item.preview;
+  }
+
+  history.replaceState({ route: state.route, detailId: item.id }, '', `/${state.route}?id=${item.id}`);
+}
+ function closeDetail() {
+  state.current = null;
+  views.detail.classList.add('hidden');
+  els.previewWrap.className = 'preview-frame-wrap';
+  els.previewFrame.src = '';
+  els.previewFrame.srcdoc = '';
+  els.gameToolbar.classList.add('hidden');
+  history.replaceState({ route: state.route }, '', `/${state.route}`);
+}
+
+async function renderRoute(routeName, query = {}) {
+  state.route = routeName;
+  state.filter = 'semua';
+  setActiveNav(routeName);
+
+  hideAllViews();
+
+  if (routeName === 'info') {
+    views.info.classList.remove('hidden');
+    renderInfoPage();
+    return;
+  }
+
+  const cfg = routes[routeName];
+  views.listing.classList.remove('hidden');
+  els.pageTitle.textContent = cfg.title;
+  els.pageDescription.textContent = cfg.desc;
+
+  els.cards.innerHTML = `<p class="loading">Memuat koleksi...</p>`;
+  state.items = await loadJson(cfg.file);
+
+  renderStats(state.items);
+  renderFilters(state.items.map(i => i.category));
+  renderCards(state.items);
+
+  if (query.id) {
+    const found = state.items.find(i => i.id == query.id);
+    if (found) openDetail(found);
+  }
+}
+
+function parseUrlQuery() {
+  const params = new URLSearchParams(location.search);
+  const out = {};
+  for (const [k, v] of params) out[k] = v;
+  return out;
+}
+
+function getCurrentRoute() {
+  const path = location.pathname.replace('/', '').trim();
+  if (routes[path]) return path;
+  return 'skin';
+}
+
+function renderInfoPage() {
+  const tutorialPanel = $('#infoTutorial');
+  const aboutPanel = $('#infoAbout');
+
+  $$('.info-tab').forEach(tab => {
+    tab.onclick = () => {
+      $$('.info-tab').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+
+      if (tab.dataset.infoTab === 'tutorial') {
+        tutorialPanel.classList.remove('hidden');
+        aboutPanel.classList.add('hidden');
+      } else {
+        tutorialPanel.classList.add('hidden');
+        aboutPanel.classList.remove('hidden');
+      }
+    };
+  });
+
+  tutorialPanel.innerHTML = `
+    <div class="tutorial-intro">
+      <div class="tutorial-mark">
+        <svg viewBox="0 0 24 24"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v16H6.5A2.5 2.5 0 0 0 4 21V5.5Z"/><path d="M4 6h13M8 9h8M8 13h6"/></svg>
       </div>
-      <div class="card-body">
-        <h3 class="card-title">${skin.tag}</h3>
-        <div class="card-buttons">
-          <button class="card-btn preview" onclick='bukaModalSkinFull(${JSON.stringify(skin).replace(/'/g, "\\'").replace(/"/g, '&quot;')})'>Preview</button>
-          <a href="${skin.link_download}" target="_blank" class="card-btn download">Unduh</a>
+      <div>
+        <p class="eyebrow">PANDUAN</p>
+        <h2>Cara Pakai ArpiMC Zone</h2>
+        <p>Ikuti langkah-langkah berikut agar kamu bisa mengunduh dan memakai konten Minecraft dengan benar.</p>
+      </div>
+    </div>
+    <div class="tutorial-list">
+      <div class="tutorial-card">
+        <div class="tutorial-number">1</div>
+        <div>
+          <h3>Pilih Koleksi</h3>
+          <p>Buka tab Skin, Addon, atau Game lalu pilih konten yang kamu suka.</p>
+        </div>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-number">2</div>
+        <div>
+          <h3>Buka Detail</h3>
+          <p>Klik tombol Detail untuk melihat pratinjau dan informasi lengkap item tersebut.</p>
+        </div>
+      </div>
+      <div class="tutorial-card">
+        <div class="tutorial-number">3</div>
+        <div>
+          <h3>Unduh File</h3>
+          <p>Tekan tombol Unduh, simpan filenya, lalu pasang ke Minecraft kamu.</p>
         </div>
       </div>
     </div>
-  `).join('');
-}
-
-// =============================================
-// === MODAL PREVIEW SKIN — LAYAR PENUH SEPERTI GAME ===
-// =============================================
-function bukaModalSkinFull(skin) {
-  const modal = document.getElementById('skinFullModal');
-  const body = document.getElementById('skinFullBody');
-  const baseUrl = window.location.origin + window.location.pathname;
-  const shareUrl = `${baseUrl}?id=${skin.id}`;
-  
-  history.replaceState(null, '', shareUrl);
-  updateMetaShare(skin);
-  
-  body.innerHTML = `
-    <img src="${skin.gambar}" alt="${skin.tag}" style="width:100%;height:100%;object-fit:contain;">
+    <div class="tutorial-note">
+      <b>Catatan:</b> Beberapa file membutuhkan Minecraft versi tertentu agar bisa berjalan normal.
+    </div>
   `;
-  
-  document.getElementById('skinFullName').textContent = skin.tag;
-  document.getElementById('skinFullDesc').innerHTML = `
-    ${skin.deskripsi || 'Credit: Pemilik asli'}<br>
-    📅 ${skin.tanggal_upload || 'Tanggal tidak diketahui'}
-  `;
-  document.getElementById('skinFullDownload').href = skin.link_download;
-  document.getElementById('skinFullShare').onclick = () => bagikanLink(skin.id, skin.tag);
-  
-  modal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-}
 
-function tutupModalSkinFull() {
-  document.getElementById('skinFullModal').classList.add('hidden');
-  document.body.style.overflow = '';
-  history.pushState(null, '', window.location.pathname);
-}
-
-// =============================================
-// === BAGIKAN LINK KE WHATSAPP / SALIN ===
-// =============================================
-async function bagikanLink(id, tag) {
-  const baseUrl = window.location.origin + window.location.pathname;
-  const shareUrl = `${baseUrl}?id=${id}`;
-  
-  const teks = `✨ ${tag}
-
-👉 Unduh di sini: ${shareUrl}
-
-📦 Dari ArpiMC Zone — Koleksi Skin & Addon Minecraft Gratis`;
-
-  try {
-    if (navigator.share) {
-      await navigator.share({
-        title: tag,
-        text: teks,
-        url: shareUrl
-      });
-    } else {
-      await navigator.clipboard.writeText(teks);
-      alert('✅ Link disalin!\n\n' + teks);
-    }
-  } catch (err) {
-    await navigator.clipboard.writeText(teks).catch(() => {});
-    alert('✅ Link disalin ke papan klip!');
-  }
-}
-
-// =============================================
-// === RENDER ADDON ===
-// =============================================
-function renderAddons() {
-  const container = document.getElementById('addonContent');
-  let filtered = allAddons;
-
-  if (currentAddonFilter !== 'all') {
-    filtered = allAddons.filter(addon => addon.kategori === currentAddonFilter);
-  }
-
-  if (filtered.length === 0) {
-    container.innerHTML = '<p class="loading-text">Addon tidak ditemukan</p>';
-    return;
-  }
-
-  container.innerHTML = filtered.map(addon => `
-    <div class="addon-card">
-      <div class="card-image-landscape">
-        <img src="${addon.gambar}" alt="${addon.nama || addon.tag}" loading="lazy">
+  $('#aboutContent').innerHTML = `
+    <div class="about-hero">
+      <div class="about-logo">
+        <img src="https://files.catbox.moe/7vkqqk.jpg" alt="Logo ArpiMC Zone">
       </div>
-      <div class="card-body">
-        <h3 class="card-title">${addon.nama || addon.tag}</h3>
-        <div class="card-buttons">
-          <a href="${addon.link_download || addon.link}" target="_blank" class="card-btn download">Unduh</a>
+      <div class="about-copy">
+        <p class="eyebrow">TENTANG KAMI</p>
+        <h2>ArpiMC Zone</h2>
+        <p class="about-lead">Pusat koleksi skin, addon, dan game untuk komunitas pecinta Minecraft.</p>
+        <p>ArpiMC Zone dibuat supaya teman-teman bisa mendapatkan konten Minecraft berkualitas dengan cepat dan mudah.</p>
+      </div>
+    </div>
+    <div class="about-feature-grid">
+      <div class="about-feature"><span>⚡</span><b>Cepat</b></div>
+      <div class="about-feature"><span>🆓</span><b>Gratis</b></div>
+      <div class="about-feature"><span>📱</span><b>Mobile</b></div>
+      <div class="about-feature"><span>❤️</span><b>Komunitas</b></div>
+    </div>
+    <div class="about-story">
+      <h3>Sejarah Singkat</h3>
+      <p>ArpiMC Zone mulai dibuat sebagai tempat kumpulan skin pribadi, lalu berkembang menjadi situs koleksi publik.</p>
+      <h3>Harapan Kami</h3>
+      <p>Semoga situs ini bisa terus bermanfaat dan menjadi rumah nyaman bagi semua pecinta Minecraft di Indonesia.</p>
+      <div class="about-disclaimer">
+        ArpiMC Zone adalah proyek komunitas independen, bukan bagian resmi Mojang Studios.
+      </div>
+    </div>
+  `;
+
+  $('#infoGroups').innerHTML = `
+    <div class="info-card">
+      <div class="info-card-head">
+        <div class="info-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        </div>
+        <div>
+          <h2>Grup Komunitas</h2>
+          <p>Gabung supaya tidak ketinggalan update baru</p>
         </div>
       </div>
+      <div class="info-links">
+        <a class="info-link" href="#" target="_blank" rel="noopener">
+          <div class="info-link-copy">
+            <b>Saluran WhatsApp</b>
+            <small>Update konten terbaru</small>
+          </div>
+          <div class="info-arrow">›</div>
+        </a>
+      </div>
     </div>
-  `).join('');
+  `;
 }
 
-// =============================================
-// === RENDER GAME ===
-// =============================================
-function renderGames() {
-  const container = document.getElementById('gameContent');
-  
-  if (allGames.length === 0) {
-    container.innerHTML = '<p class="loading-text">Game belum tersedia</p>';
-    return;
+function bindEvents() {
+  els.backButton.onclick = closeDetail;
+  els.backButtonGame.onclick = closeDetail;
+
+  els.themeOpen.onclick = () => els.themePanel.classList.remove('hidden');
+  els.themeClose.onclick = () => els.themePanel.classList.add('hidden');
+
+  $$('.theme-choice').forEach(btn => {
+    btn.onclick = () => {
+      setTheme(btn.dataset.theme);
+      els.themePanel.classList.add('hidden');
+    };
+  });
+
+  $$('.nav-item').forEach(item => {
+    item.onclick = e => {
+      e.preventDefault();
+      const routeName = item.dataset.route;
+      renderRoute(routeName, {});
+      history.pushState({ route: routeName }, '', `/${routeName}`);
+    };
+  });
+
+  window.addEventListener('popstate', () => {
+    const routeName = getCurrentRoute();
+    renderRoute(routeName, parseUrlQuery());
+  });
+}
+
+async function init() {
+  setTheme(state.theme);
+  bindEvents();
+
+  if ('serviceWorker' in navigator) {
+    try {
+      await navigator.serviceWorker.register('/sw.js');
+      console.log('SW terdaftar');
+    } catch (e) {
+      console.warn('SW gagal daftar', e);
+    }
   }
 
-  container.innerHTML = allGames.map(game => `
-    <div class="game-card" onclick="bukaGameFull('${game.link}', '${game.nama || game.tag}')">
-      <div class="card-image-wrapper">
-        <img src="${game.gambar}" alt="${game.nama || game.tag}" loading="lazy">
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">${game.nama || game.tag}</h3>
-        <button class="card-btn download">▶ Buka Game</button>
-      </div>
-    </div>
-  `).join('');
+  const routeName = getCurrentRoute();
+  renderRoute(routeName, parseUrlQuery());
 }
 
-// =============================================
-// === MODAL GAME FULL SCREEN ===
-// =============================================
-function bukaGameFull(link, nama) {
-  const modal = document.getElementById('gameFullModal');
-  const iframe = document.getElementById('gameIframeFull');
-  const tabBtn = document.getElementById('gameOpenTabBtn');
-  
-  iframe.src = link;
-  tabBtn.href = link;
-  modal.classList.remove('hidden');
-  document.body.style.overflow = 'hidden';
-}
-
-function tutupGameFull() {
-  const modal = document.getElementById('gameFullModal');
-  const iframe = document.getElementById('gameIframeFull');
-  modal.classList.add('hidden');
-  iframe.src = '';
-  document.body.style.overflow = '';
-}
-
-// =============================================
-// === NAVIGASI BAWAH ===
-// =============================================
-function setupNavigation() {
-  const navTabs = document.querySelectorAll('.bottom-nav-item');
-  const pages = document.querySelectorAll('.page-section');
-
-  navTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      const targetPage = tab.getAttribute('data-page');
-      
-      navTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      
-      pages.forEach(page => {
-        page.classList.remove('active');
-        if (page.id === `page-${targetPage}`) {
-          page.classList.add('active');
-        }
-      });
-      
-      tutupModalSkinFull();
-      tutupGameFull();
-    });
-  });
-}
-
-// =============================================
-// === FILTER KATEGORI ===
-// =============================================
-function setupSkinFilter() {
-  const filterTabs = document.querySelectorAll('#page-skin .filter-tab');
-  
-  filterTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      filterTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentFilter = tab.getAttribute('data-filter');
-      renderSkins();
-    });
-  });
-}
-
-function setupAddonFilter() {
-  const filterTabs = document.querySelectorAll('#page-addon .filter-tab');
-  
-  filterTabs.forEach(tab => {
-    tab.addEventListener('click', () => {
-      filterTabs.forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      currentAddonFilter = tab.getAttribute('data-filter');
-      renderAddons();
-    });
-  });
-}
-
-// =============================================
-// === TEMA ===
-// =============================================
-function setupThemes() {
-  const savedTheme = localStorage.getItem('arpimc-theme') || 'default';
-  document.documentElement.setAttribute('data-theme', savedTheme);
-  
-  const themeBtn = document.getElementById('themeToggle');
-  const themePanel = document.getElementById('themePanel');
-  const closePanel = document.getElementById('closeThemePanel');
-  const themeOptions = document.querySelectorAll('.theme-option');
-  
-  themeBtn.addEventListener('click', () => {
-    themePanel.classList.toggle('hidden');
-  });
-  
-  closePanel.addEventListener('click', () => {
-    themePanel.classList.add('hidden');
-  });
-  
-  themeOptions.forEach(option => {
-    option.addEventListener('click', () => {
-      const theme = option.getAttribute('data-theme');
-      document.documentElement.setAttribute('data-theme', theme);
-      localStorage.setItem('arpimc-theme', theme);
-      themePanel.classList.add('hidden');
-    });
-  });
-}
-
-// =============================================
-// === PWA ===
-// =============================================
-let deferredPrompt;
-function setupPWA() {
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault();
-    deferredPrompt = e;
-  });
-  window.addEventListener('appinstalled', () => {
-    deferredPrompt = null;
-  });
-}
-
-// =============================================
-// === INISIALISASI ===
-// =============================================
-document.addEventListener('DOMContentLoaded', () => {
-  setupNavigation();
-  setupSkinFilter();
-  setupAddonFilter();
-  setupThemes();
-  setupPWA();
-  loadAllData();
-});
+document.addEventListener('DOMContentLoaded', init);

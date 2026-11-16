@@ -10,6 +10,7 @@
 <link rel="preconnect" href="https://files.catbox.moe"><link rel="stylesheet" href="/style.css">
 </head>
 <body>
+<div class="coslo-background" aria-hidden="true"><video id="cosloVideo" muted loop playsinline></video></div>
 <header class="site-header">
  <a class="brand" href="/skin" aria-label="ArpiMC Zone"><img src="https://files.catbox.moe/7vkqqk.jpg" alt="Logo ArpiMC Zone" onerror="this.src='/icons/icon.svg'"><span>ArpiMC Zone</span></a>
  <div class="header-actions">
@@ -46,7 +47,7 @@
 <a class="nav-item" data-route="game" href="/game"><svg viewBox="0 0 24 24"><path d="M6.5 8h11a4 4 0 0 1 3.8 5l-1 3.2a2.5 2.5 0 0 1-4.1 1.1L14 15h-4l-2.2 2.3a2.5 2.5 0 0 1-4.1-1.1l-1-3.2a4 4 0 0 1 3.8-5Z"/><path d="M7 10.5v4M5 12.5h4M16.5 11.5h.01M18.5 13.5h.01"/></svg><span>Game</span></a>
 <a class="nav-item" data-route="info" href="/info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v5M12 8h.01"/></svg><span>Info</span></a>
 </nav>
-<div class="theme-backdrop hidden" id="themePanel"><div class="theme-panel"><div class="theme-head"><h2>Pilih Tema</h2><button id="themeClose" class="close-button" aria-label="Tutup">×</button></div><button class="theme-choice" data-theme="default">Default</button><button class="theme-choice" data-theme="neobrutal">Neo-Brutaslim</button><button class="theme-choice" data-theme="dark">Dark</button><button class="theme-choice" data-theme="nori">Tema Pink</button></div></div>
+ <div class="theme-backdrop hidden" id="themePanel"><div class="theme-panel"><div class="theme-head"><div><h2>Pilih Tema</h2><p class="theme-subtitle">Coslo = custom local, hanya tersimpan di perangkat ini.</p></div><button id="themeClose" class="close-button" aria-label="Tutup">×</button></div><button class="theme-choice" data-theme="default">Default</button><button class="theme-choice" data-theme="neobrutal">Neo-Brutaslim</button><button class="theme-choice" data-theme="dark">Dark</button><button class="theme-choice" data-theme="nori">Tema Pink</button><button class="theme-choice" data-theme="coslo">Tema Coslo</button><div class="coslo-controls hidden" id="cosloControls"><label class="coslo-field"><span>Foto atau video latar</span><input id="cosloMedia" type="file" accept="image/*,video/*"></label><div class="coslo-color-grid"><label class="coslo-field"><span>Warna aksen</span><input id="cosloAccent" type="color" value="#00b894"></label><label class="coslo-field"><span>Warna panel</span><input id="cosloSurface" type="color" value="#101820"></label></div><label class="coslo-toggle"><input id="cosloContrast" type="checkbox" checked><span>Pertahankan kontras tinggi</span></label><button class="coslo-reset" id="cosloReset" type="button">Hapus media & reset warna</button></div></div></div>
 <div class="toast hidden" id="toast" role="status"></div>
 <script src="/fallback-data.js" defer></script>
 <script src="/script.js" defer></script>

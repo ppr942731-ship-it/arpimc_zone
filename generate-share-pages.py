@@ -75,6 +75,10 @@ def page_html(kind: str, item: dict, share_url: str, app_url: str) -> str:
   <meta property="og:description" content="{safe_description}">
   <meta property="og:image" content="{safe_image}">
   <meta property="og:image:alt" content="{escape(image_alt, quote=True)}">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:secure_url" content="{safe_image}">
   <meta property="og:url" content="{safe_share_url}">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="{safe_title} — ArpiMC Zone">
@@ -104,7 +108,6 @@ def page_html(kind: str, item: dict, share_url: str, app_url: str) -> str:
       <small>{safe_share_url}</small>
     </section>
   </main>
-  <script>location.replace({json.dumps(app_url)});</script>
 </body>
 </html>
 '''

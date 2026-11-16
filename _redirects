@@ -1,5 +1,13 @@
 /skin /index.html 200
+/skin/share /index.html 200
+/skin/share/* /index.html 200
 /addon /index.html 200
+/addon/share /index.html 200
+/addon/share/* /index.html 200
 /game /index.html 200
+/game/share /index.html 200
+/game/share/* /index.html 200
 /tools /index.html 200
+/tools/share /index.html 200
+/tools/share/* /index.html 200
 /info /index.html 200

@@ -5,7 +5,15 @@
       "destination": "/index.html"
     },
     {
+      "source": "/skin/share",
+      "destination": "/index.html"
+    },
+    {
       "source": "/addon",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/addon/share",
       "destination": "/index.html"
     },
     {
@@ -13,7 +21,15 @@
       "destination": "/index.html"
     },
     {
+      "source": "/game/share",
+      "destination": "/index.html"
+    },
+    {
       "source": "/tools",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/tools/share",
       "destination": "/index.html"
     },
     {

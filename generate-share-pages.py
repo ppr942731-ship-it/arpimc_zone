@@ -37,11 +37,7 @@ def item_slug(item: dict, kind: str) -> str:
 
 
 def load_skins() -> list[dict]:
-    fallback = (ROOT / "fallback-data.js").read_text(encoding="utf-8")
-    match = re.search(r"window\.ARPIMC_FALLBACK_DATA=(\{.*\});\s*$", fallback, re.S)
-    if not match:
-        raise RuntimeError("fallback-data.js tidak berisi ARPIMC_FALLBACK_DATA")
-    return json.loads(match.group(1))["skins"]
+    return load_json("skins.json")
 
 
 def load_json(name: str) -> list[dict]:

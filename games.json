@@ -108,15 +108,5 @@
     "kategori": "game-santai",
     "tanggal_upload": "16 Nov 2026",
     "sumber": "https://html5games.com/"
-  },
-  {
-    "id": 12,
-    "nama": "Info Pasang ArpiMC Zone",
-    "deskripsi": "Buka panduan informasi ArpiMC Zone untuk memasang website ke layar utama perangkat.",
-    "link": "/info",
-    "jenis": "game",
-    "kategori": "info-pasang",
-    "tanggal_upload": "16 Nov 2026",
-    "sumber": "/info"
   }
 ]

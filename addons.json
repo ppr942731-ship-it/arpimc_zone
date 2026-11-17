@@ -42,5 +42,15 @@
     "versi": "1.26+",
     "ukuran": "23,33 mb",
     "tanggal_upload": "25 Okt 2026"
+  },
+  {
+    "id": 12,
+    "nama": "Info Pasang ArpiMC Zone",
+    "deskripsi": "Buka panduan informasi ArpiMC Zone untuk memasang website ke layar utama perangkat.",
+    "link": "/info",
+    "jenis": "addon",
+    "kategori": "info-pasang",
+    "tanggal_upload": "16 Nov 2026",
+    "sumber": "/info"
   }
 ]

@@ -10,7 +10,6 @@ from html import escape
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-SITE = "https://arpimc.zone.id"
 LOGO = "https://files.catbox.moe/7vkqqk.jpg"
 
 
@@ -124,11 +123,13 @@ def write_pages(kind: str, items: list[dict]) -> int:
         if kind == "game":
             actual_kind = "tools" if str(item.get("jenis") or item.get("tipe") or "").lower() in {"tool", "tools", "alat"} else "game"
         slug = item_slug(item, kind)
-        share_url = f"{SITE}/share/{actual_kind}/{slug}"
+        # Path relatif membuat preview beta/eksperimen dan production memakai
+        # origin tempat halaman tersebut sedang di-host.
+        share_url = f"/share/{actual_kind}/{slug}"
         query_slug = slug
         if kind == "skin":
             query_slug = re.sub(r"-\d+$", "", slug)
-        app_url = f"{SITE}/{actual_kind}/share?{query_slug}-id={item.get('id')}"
+        app_url = f"/{actual_kind}/share?{query_slug}-id={item.get('id')}"
         target = ROOT / "share" / actual_kind / slug / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(page_html(actual_kind, item, share_url, app_url), encoding="utf-8")

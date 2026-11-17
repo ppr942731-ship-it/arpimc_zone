@@ -1,6 +1,22 @@
 {
   "rewrites": [
     {
+      "source": "/share/skin/:slug",
+      "destination": "/share/skin/:slug/index.html"
+    },
+    {
+      "source": "/share/addon/:slug",
+      "destination": "/share/addon/:slug/index.html"
+    },
+    {
+      "source": "/share/game/:slug",
+      "destination": "/share/game/:slug/index.html"
+    },
+    {
+      "source": "/share/tools/:slug",
+      "destination": "/share/tools/:slug/index.html"
+    },
+    {
       "source": "/skin",
       "destination": "/index.html"
     },

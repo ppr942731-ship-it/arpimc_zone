@@ -24,10 +24,14 @@ def slugify(value: str) -> str:
 def item_slug(item: dict, kind: str) -> str:
     if kind == "skin":
         raw = item.get("slug") or item.get("tag") or item.get("nama") or ""
-        raw = re.sub(r"^SKIN\s*", "", raw, flags=re.I)
+        if not re.match(r"^skin-", raw, flags=re.I):
+            raw = re.sub(r"^SKIN\s+", "", raw, flags=re.I)
         raw = re.sub(r"\s*\|\s*", "-", raw)
         raw = re.sub(r"^CR\s*", "cr-", raw, flags=re.I)
-        return slugify(raw) or f"skin-{item.get('id')}"
+        result = slugify(raw)
+        result = result if result.startswith("skin-") else f"skin-{result}"
+        suffix = f"-{item.get('id')}"
+        return result if result.endswith(suffix) else f"{result}{suffix}"
     if kind == "addon" and str(item.get("nama", "")).lower() == "mutants":
         return "mutans"
     return slugify(item.get("slug") or item.get("nama") or f"{kind}-{item.get('id')}")
@@ -46,7 +50,7 @@ def load_json(name: str) -> list[dict]:
 
 
 def page_html(kind: str, item: dict, share_url: str, app_url: str) -> str:
-    title = item.get("tag") if kind == "skin" else item.get("nama")
+    title = item.get("tag") or item.get("nama") if kind == "skin" else item.get("nama")
     title = title or f"{kind.title()} ArpiMC Zone"
     category = item.get("kategori") or item.get("jenis") or kind
     description = item.get("deskripsi") or f"Lihat detail {title} di ArpiMC Zone."
@@ -121,7 +125,10 @@ def write_pages(kind: str, items: list[dict]) -> int:
             actual_kind = "tools" if str(item.get("jenis") or item.get("tipe") or "").lower() in {"tool", "tools", "alat"} else "game"
         slug = item_slug(item, kind)
         share_url = f"{SITE}/share/{actual_kind}/{slug}"
-        app_url = f"{SITE}/{actual_kind}?{slug}-id={item.get('id')}"
+        query_slug = slug
+        if kind == "skin":
+            query_slug = re.sub(r"-\d+$", "", slug)
+        app_url = f"{SITE}/{actual_kind}/share?{query_slug}-id={item.get('id')}"
         target = ROOT / "share" / actual_kind / slug / "index.html"
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(page_html(actual_kind, item, share_url, app_url), encoding="utf-8")

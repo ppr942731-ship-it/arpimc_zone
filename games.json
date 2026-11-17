@@ -6,7 +6,8 @@
     "link": "https://tic-tac-toe-arpi.vercel.app/",
     "tipe": "games",
     "tanggal_upload": "25 Okt 2026",
-    "jenis": "game"
+    "jenis": "game",
+    "kategori": "game-santai"
   },
   {
     "id": 2,
@@ -15,7 +16,8 @@
     "link": "https://arpihost2.lovable.app/kuis-mc-mob/",
     "tipe": "games",
     "tanggal_upload": "26 Okt 2026",
-    "jenis": "game"
+    "jenis": "game",
+    "kategori": "game-mc"
   },
   {
     "id": 3,
@@ -24,7 +26,8 @@
     "link": "https://arpihost2.lovable.app/kuis-mc-item/",
     "tipe": "games",
     "tanggal_upload": "26 Okt 2026",
-    "jenis": "game"
+    "jenis": "game",
+    "kategori": "game-mc"
   },
   {
     "id": 4,
@@ -33,7 +36,8 @@
     "link": "https://mcskins.top/avatar-maker",
     "tipe": "tools",
     "tanggal_upload": "27 Okt 2026",
-    "jenis": "tools"
+    "jenis": "tools",
+    "kategori": "web-mc"
   },
   {
     "id": 5,
@@ -42,7 +46,8 @@
     "link": "https://builditapp.com/",
     "tipe": "tools",
     "tanggal_upload": "28 Okt 2026",
-    "jenis": "tools"
+    "jenis": "tools",
+    "kategori": "web-mc"
   },
   {
     "id": 6,
@@ -51,7 +56,8 @@
     "link": "https://hostxy.cloud/arpimc/puzzle-image/",
     "tipe": "games",
     "tanggal_upload": "14 Nov 2026",
-    "jenis": "game"
+    "jenis": "game",
+    "kategori": "game-santai"
   },
   {
     "id": 7,
@@ -60,6 +66,57 @@
     "link": "https://m.vidio.com/live/205-indosiar",
     "tipe": "tools",
     "tanggal_upload": "15 Nov 2026",
-    "jenis": "tools"
+    "jenis": "tools",
+    "kategori": "fun"
+  },
+  {
+    "id": 8,
+    "nama": "Laby Skin Editor",
+    "deskripsi": "Editor skin Minecraft 2D dan 3D langsung di browser, dengan layer, filter, dan ekspor PNG.",
+    "link": "https://laby.net/tools/skin-editor",
+    "jenis": "tools",
+    "kategori": "web-mc",
+    "tanggal_upload": "16 Nov 2026",
+    "sumber": "https://laby.net/tools/skin-editor"
+  },
+  {
+    "id": 9,
+    "nama": "Minecraft Avatar Maker",
+    "deskripsi": "Buat avatar, PFP, banner, dan GIF dari skin Minecraft langsung di browser.",
+    "link": "https://www.minecraftmaps.com/tools/avatar-maker",
+    "jenis": "tools",
+    "kategori": "web-mc",
+    "tanggal_upload": "16 Nov 2026",
+    "sumber": "https://www.minecraftmaps.com/tools/avatar-maker"
+  },
+  {
+    "id": 10,
+    "nama": "SkinMC Editor",
+    "deskripsi": "Editor skin Minecraft dengan tampilan 2D/3D, autosave lokal, dan ekspor PNG.",
+    "link": "https://skinmc.net/skin-editor",
+    "jenis": "tools",
+    "kategori": "web-mc",
+    "tanggal_upload": "16 Nov 2026",
+    "sumber": "https://skinmc.net/skin-editor"
+  },
+  {
+    "id": 11,
+    "nama": "HTML5 Games",
+    "deskripsi": "Katalog game HTML5 gratis yang dapat dimainkan melalui browser.",
+    "link": "https://html5games.com/",
+    "jenis": "game",
+    "kategori": "game-santai",
+    "tanggal_upload": "16 Nov 2026",
+    "sumber": "https://html5games.com/"
+  },
+  {
+    "id": 12,
+    "nama": "Info Pasang ArpiMC Zone",
+    "deskripsi": "Buka panduan informasi ArpiMC Zone untuk memasang website ke layar utama perangkat.",
+    "link": "https://arpimc.zone.id/info",
+    "jenis": "game",
+    "kategori": "info-pasang",
+    "tanggal_upload": "16 Nov 2026",
+    "sumber": "https://arpimc.zone.id/info"
   }
 ]

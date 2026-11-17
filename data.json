@@ -78,11 +78,11 @@
     },
     {
       "title": "Melihat dan mengunduh addon",
-      "text": "Buka menu Addon, pilih kategori yang tersedia, lalu gunakan Preview untuk melihat gambar addon dalam format landscape. Tombol Unduh tersedia langsung pada card maupun halaman detail."
+      "text": "Buka menu Addon, pilih kategori Addon, Pack, Shader, UI, Horor, Survival, Maps, atau Info Pasang. Gunakan Preview untuk melihat gambar dan detail. Tombol Unduh tersedia langsung pada card maupun halaman detail."
     },
     {
       "title": "Memainkan game dan membuka tools",
-      "text": "Buka menu Game untuk melihat permainan. Filter kategori Semua, Game, Tools, Fun, atau Lain-lain. Tombol Mainkan membuka halaman permainan. Tools juga dapat dibuka melalui alamat /tools."
+      "text": "Buka menu Game untuk melihat permainan. Pilih kategori Game MC, Game Santai, Tools, atau Lain-lain. Tombol Mainkan membuka halaman permainan. Tools juga dapat dibuka melalui alamat /tools."
     },
     {
       "title": "Membagikan konten",

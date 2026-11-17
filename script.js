@@ -12,7 +12,7 @@ function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.remove(
 async function readJsonFile(file,key){
  const fallback=window.ARPIMC_FALLBACK_DATA||{};
  const url=new URL(file,document.baseURI||location.origin+'/');
- url.searchParams.set('v','6');
+ url.searchParams.set('v','10');
  try{
   const response=await fetch(url.href,{method:'GET',cache:'no-store',headers:{'Accept':'application/json'}});
   if(!response.ok)throw new Error(`${file}: HTTP ${response.status}`);

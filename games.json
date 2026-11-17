@@ -113,10 +113,10 @@
     "id": 12,
     "nama": "Info Pasang ArpiMC Zone",
     "deskripsi": "Buka panduan informasi ArpiMC Zone untuk memasang website ke layar utama perangkat.",
-    "link": "https://arpimc.zone.id/info",
+    "link": "/info",
     "jenis": "game",
     "kategori": "info-pasang",
     "tanggal_upload": "16 Nov 2026",
-    "sumber": "https://arpimc.zone.id/info"
+    "sumber": "/info"
   }
 ]

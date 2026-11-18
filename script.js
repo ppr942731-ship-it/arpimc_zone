@@ -76,7 +76,7 @@ function renderInfo(){
  const tutorials=d.tutorial||[
   {title:'Menjelajahi koleksi skin',text:'Buka menu Skin, pilih kategori seperti Cowok, Cewek, PVP, Template Skin, atau Skin Pack. Tekan gambar atau tombol Preview untuk melihat detail. Gunakan Unduh jika ingin mengambil file tanpa membuka halaman detail.'},
   {title:'Melihat dan mengunduh addon',text:'Buka menu Addon. Pilih kategori yang tersedia, lalu gunakan Preview untuk melihat gambar addon dalam format landscape. Tombol Unduh tersedia langsung pada card maupun halaman detail.'},
-  {title:'Memainkan game dan membuka tools',text:'Buka menu Game untuk melihat permainan. Pilih kategori Semua, Game, Tools, Fun, atau Lain-lain. Tombol Mainkan membuka halaman permainan. Tools memiliki alamat tersendiri di /tools.'},
+  {title:'Memainkan game dan membuka tools',text:'Buka menu Game untuk melihat permainan. Pilih kategori Game MC, Game Santai, Tools, atau Lain-lain. Tombol Mainkan membuka halaman permainan. Tools juga dapat dibuka melalui alamat /tools.'},
   {title:'Membagikan konten',text:'Tekan Bagikan pada card atau Kirim via WhatsApp pada halaman detail. Pesan akan memuat tautan halaman item agar penerima bisa membuka konten yang sama.'},
   {title:'Memasang ArpiMC Zone',text:'Gunakan tombol Unduh ArpiMC Zone di bagian atas. Jika browser mendukung instalasi, ikuti prompt yang muncul. Jika tidak, buka menu browser dan pilih Tambahkan ke layar utama. Instalasi PWA memerlukan HTTPS.'}
  ];

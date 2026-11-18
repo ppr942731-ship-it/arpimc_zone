@@ -51,13 +51,14 @@
   },
   {
     "id": 6,
-    "nama": "Puzzle Image",
-    "deskripsi": "Susun gambar kamu",
-    "link": "https://hostxy.cloud/arpimc/puzzle-image/",
+    "nama": "Minecraft Puzzle Image",
+    "deskripsi": "Susun puzzle gambar Minecraft langsung di browser",
+    "link": "https://www.jigsaw365.com/minecraft",
     "tipe": "games",
     "tanggal_upload": "14 Nov 2026",
     "jenis": "game",
-    "kategori": "game-santai"
+    "kategori": "game-santai",
+    "sumber": "https://www.jigsaw365.com/minecraft"
   },
   {
     "id": 7,
